@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -11,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { ArrowLeft, Eye, EyeOff, UserPlus } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
+import { supabase } from '@/integrations/supabase/client';
 
 const registerSchema = z.object({
   firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
@@ -36,6 +38,19 @@ const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate('/');
+      }
+    };
+    
+    checkSession();
+  }, [navigate]);
   
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -50,18 +65,51 @@ const Register = () => {
     }
   });
   
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("Registration data:", data);
-    
-    toast({
-      title: "Compte créé avec succès",
-      description: data.isOrganizer 
-        ? "Votre compte organisateur a été créé. Vous pouvez maintenant vous connecter."
-        : "Votre compte a été créé. Vous pouvez maintenant vous connecter.",
-      variant: "default",
-    });
-    
-    setTimeout(() => navigate('/login'), 1500);
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      setIsLoading(true);
+      
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            isOrganizer: data.isOrganizer
+          }
+        }
+      });
+      
+      if (error) {
+        toast({
+          title: "Erreur d'inscription",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      toast({
+        title: "Compte créé avec succès",
+        description: data.isOrganizer 
+          ? "Votre compte organisateur a été créé. Vérifiez votre email pour activer votre compte."
+          : "Votre compte a été créé. Vérifiez votre email pour activer votre compte.",
+        variant: "default",
+      });
+      
+      setTimeout(() => navigate('/login'), 2000);
+      
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   return (
@@ -255,9 +303,16 @@ const Register = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-gold text-rich-black hover:bg-gold/80 flex items-center justify-center gap-2"
+                  disabled={isLoading}
                 >
-                  <UserPlus className="h-4 w-4" />
-                  Créer mon compte
+                  {isLoading ? (
+                    <span className="animate-pulse">Chargement...</span>
+                  ) : (
+                    <>
+                      <UserPlus className="h-4 w-4" />
+                      Créer mon compte
+                    </>
+                  )}
                 </Button>
               </form>
             </Form>

@@ -1,14 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Search, User, ShoppingBag } from 'lucide-react';
+import { Menu, X, Search, User, ShoppingBag, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Session } from '@supabase/supabase-js';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -23,7 +27,28 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, currentSession) => {
+        setSession(currentSession);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+  
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
   
   const navLinks = [
     { name: 'Accueil', href: '/' },
@@ -69,15 +94,31 @@ const Navbar = () => {
             <Button variant="ghost" size="icon" className="hover:text-gold">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="hover:text-gold">
-              <User className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon" className="hover:text-gold">
-              <ShoppingBag className="h-5 w-5" />
-            </Button>
-            <Button variant="outline" className="border-gold text-gold hover:bg-gold hover:text-rich-black">
-              Connexion
-            </Button>
+            {session ? (
+              <>
+                <Button variant="ghost" size="icon" className="hover:text-gold">
+                  <User className="h-5 w-5" />
+                </Button>
+                <Button variant="ghost" size="icon" className="hover:text-gold">
+                  <ShoppingBag className="h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="border-gold text-gold hover:bg-gold hover:text-rich-black"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-2" /> Déconnexion
+                </Button>
+              </>
+            ) : (
+              <Button 
+                variant="outline" 
+                className="border-gold text-gold hover:bg-gold hover:text-rich-black"
+                onClick={() => navigate('/login')}
+              >
+                Connexion
+              </Button>
+            )}
           </div>
           
           {/* Mobile menu button */}
@@ -108,15 +149,32 @@ const Navbar = () => {
                 <Button variant="ghost" size="icon" className="hover:text-gold">
                   <Search className="h-5 w-5" />
                 </Button>
-                <Button variant="ghost" size="icon" className="hover:text-gold">
-                  <User className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" size="icon" className="hover:text-gold">
-                  <ShoppingBag className="h-5 w-5" />
-                </Button>
-                <Button className="bg-gold text-rich-black hover:bg-gold/80">
-                  Connexion
-                </Button>
+                {session ? (
+                  <>
+                    <Button variant="ghost" size="icon" className="hover:text-gold">
+                      <User className="h-5 w-5" />
+                    </Button>
+                    <Button variant="ghost" size="icon" className="hover:text-gold">
+                      <ShoppingBag className="h-5 w-5" />
+                    </Button>
+                    <Button 
+                      className="bg-gold text-rich-black hover:bg-gold/80"
+                      onClick={handleLogout}
+                    >
+                      Déconnexion
+                    </Button>
+                  </>
+                ) : (
+                  <Button 
+                    className="bg-gold text-rich-black hover:bg-gold/80"
+                    onClick={() => {
+                      navigate('/login');
+                      toggleMenu();
+                    }}
+                  >
+                    Connexion
+                  </Button>
+                )}
               </div>
             </div>
           </div>

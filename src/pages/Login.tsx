@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { ArrowRight, Eye, EyeOff, LogIn } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
@@ -23,6 +24,19 @@ const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        navigate('/');
+      }
+    };
+    
+    checkSession();
+  }, [navigate]);
   
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -32,18 +46,42 @@ const Login = () => {
     }
   });
   
-  const onSubmit = (data: LoginFormData) => {
-    // This would normally connect to a backend API
-    console.log("Login attempt:", data);
-    
-    toast({
-      title: "Connexion réussie",
-      description: "Vous êtes maintenant connecté à votre compte.",
-      variant: "default",
-    });
-    
-    // Navigate to home page after login
-    setTimeout(() => navigate('/'), 1500);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      setIsLoading(true);
+      
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password
+      });
+      
+      if (error) {
+        toast({
+          title: "Erreur de connexion",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      toast({
+        title: "Connexion réussie",
+        description: "Vous êtes maintenant connecté à votre compte.",
+        variant: "default",
+      });
+      
+      navigate('/');
+      
+    } catch (error) {
+      console.error("Login error:", error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur s'est produite lors de la connexion. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   const toggleShowPassword = () => {
@@ -129,9 +167,16 @@ const Login = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-gold text-rich-black hover:bg-gold/80 flex items-center justify-center gap-2"
+                  disabled={isLoading}
                 >
-                  <LogIn className="h-4 w-4" />
-                  Se connecter
+                  {isLoading ? (
+                    <span className="animate-pulse">Chargement...</span>
+                  ) : (
+                    <>
+                      <LogIn className="h-4 w-4" />
+                      Se connecter
+                    </>
+                  )}
                 </Button>
               </form>
             </Form>
