@@ -3,6 +3,7 @@ import React from 'react';
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon, Mail, Phone, MapPin } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,30 +12,30 @@ const Footer = () => {
     {
       title: "Événements",
       links: [
-        { name: "Concerts", href: "#" },
-        { name: "Festivals", href: "#" },
-        { name: "Sports", href: "#" },
-        { name: "Théâtre", href: "#" },
-        { name: "Conférences", href: "#" }
+        { name: "Concerts", href: "/#events" },
+        { name: "Festivals", href: "/#events" },
+        { name: "Sports", href: "/#events" },
+        { name: "Théâtre", href: "/#events" },
+        { name: "Conférences", href: "/#events" }
       ]
     },
     {
       title: "Informations",
       links: [
-        { name: "À propos", href: "#" },
-        { name: "Comment ça marche", href: "#" },
-        { name: "FAQ", href: "#" },
-        { name: "Contact", href: "#" },
-        { name: "Partenaires", href: "#" }
+        { name: "À propos", href: "/about" },
+        { name: "Comment ça marche", href: "/how-it-works" },
+        { name: "FAQ", href: "/faq" },
+        { name: "Contact", href: "/contact" },
+        { name: "Partenaires", href: "/partners" }
       ]
     },
     {
       title: "Légal",
       links: [
-        { name: "Conditions générales", href: "#" },
-        { name: "Politique de confidentialité", href: "#" },
-        { name: "Cookies", href: "#" },
-        { name: "Mentions légales", href: "#" }
+        { name: "Conditions générales", href: "/cgu" },
+        { name: "Politique de confidentialité", href: "/privacy" },
+        { name: "Cookies", href: "/cookies" },
+        { name: "Mentions légales", href: "/legal" }
       ]
     }
   ];
@@ -52,12 +53,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
           {/* Logo and info */}
           <div className="md:col-span-2">
-            <a href="/" className="inline-block mb-4">
+            <Link to="/" className="inline-block mb-4">
               <span className="font-playfair font-bold text-3xl">
                 <span className="text-bordeaux">Aura</span>
                 <span className="text-gold">Tickets</span>
               </span>
-            </a>
+            </Link>
             
             <p className="text-off-white/70 mb-6 max-w-md">
               Votre plateforme premium pour accéder aux événements les plus exclusifs. Nous vous proposons une expérience de billetterie en ligne de luxe.
@@ -90,9 +91,9 @@ const Footer = () => {
               <ul className="space-y-2">
                 {column.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    <a href={link.href} className="text-off-white/70 hover:text-gold transition-colors">
+                    <Link to={link.href} className="text-off-white/70 hover:text-gold transition-colors">
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

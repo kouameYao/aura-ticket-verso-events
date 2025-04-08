@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Search, User, ShoppingBag } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,11 +26,13 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   
   const navLinks = [
-    { name: 'Accueil', href: '#' },
-    { name: 'Événements', href: '#events' },
-    { name: 'Catégories', href: '#categories' },
-    { name: 'À propos', href: '#about' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Accueil', href: '/' },
+    { name: 'Événements', href: '/#events' },
+    { name: 'À propos', href: '/about' },
+    { name: 'Comment ça marche', href: '/how-it-works' },
+    { name: 'FAQ', href: '/faq' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'Partenaires', href: '/partners' },
   ];
   
   return (
@@ -38,25 +41,25 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="/" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <span className="font-playfair font-bold text-2xl md:text-3xl">
                 <span className="text-bordeaux">Aura</span>
                 <span className="text-gold">Tickets</span>
               </span>
-            </a>
+            </Link>
           </div>
           
           {/* Desktop Navigation */}
           {!isMobile && (
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               {navLinks.map((link) => (
-                <a 
+                <Link 
                   key={link.name} 
-                  href={link.href}
+                  to={link.href}
                   className="font-montserrat text-sm font-medium hover:text-gold transition-colors"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </div>
           )}
@@ -92,14 +95,14 @@ const Navbar = () => {
           <div className="md:hidden glassmorphism mt-4 p-4 rounded-lg animate-fade-in">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="px-3 py-2 text-base font-medium hover:text-gold"
                   onClick={toggleMenu}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
               <div className="pt-4 flex items-center justify-between border-t border-white/10">
                 <Button variant="ghost" size="icon" className="hover:text-gold">
