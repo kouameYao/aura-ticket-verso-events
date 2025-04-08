@@ -157,7 +157,7 @@ const EventsSection = () => {
                   <SelectValue placeholder="Lieu" />
                 </SelectTrigger>
                 <SelectContent className="bg-rich-black border border-titanium/30">
-                  <SelectItem value="">Tous les lieux</SelectItem>
+                  <SelectItem value="all">Tous les lieux</SelectItem>
                   {locations.map(location => (
                     <SelectItem key={location} value={location}>
                       {location}
