@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -22,8 +21,8 @@ const registerSchema = z.object({
   }),
   confirmPassword: z.string(),
   isOrganizer: z.boolean().default(false),
-  acceptTerms: z.literal(true, {
-    errorMap: () => ({ message: "Vous devez accepter les conditions générales" }),
+  acceptTerms: z.boolean().refine(val => val === true, {
+    message: "Vous devez accepter les conditions générales",
   }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Les mots de passe ne correspondent pas",
@@ -52,7 +51,6 @@ const Register = () => {
   });
   
   const onSubmit = (data: RegisterFormData) => {
-    // This would normally connect to a backend API
     console.log("Registration data:", data);
     
     toast({
@@ -63,7 +61,6 @@ const Register = () => {
       variant: "default",
     });
     
-    // Navigate to login page after registration
     setTimeout(() => navigate('/login'), 1500);
   };
   
