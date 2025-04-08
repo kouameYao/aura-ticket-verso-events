@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   CalendarDays, 
@@ -8,7 +8,8 @@ import {
   Tag, 
   ArrowLeft,
   Share2,
-  Heart
+  Heart,
+  Image
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +19,7 @@ import EventTimer from '@/components/EventTimer';
 import TicketSelection from '@/components/TicketSelection';
 import RelatedEvents from '@/components/RelatedEvents';
 import { EventProps } from '@/components/EventCard';
+import ImageGallery from '@/components/ImageGallery';
 
 const events: EventProps[] = [
   {
@@ -30,6 +32,10 @@ const events: EventProps[] = [
     category: "Concert",
     price: "89€",
     featured: true,
+    additionalImages: [
+      "https://images.unsplash.com/photo-1498036882173-b41c28a8ba34?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1511192336575-5a79af67a629?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Plongez dans l'univers envoûtant du jazz et de la soul lors de ce festival exceptionnel. Des artistes de renommée mondiale se réunissent pour vous offrir des performances inoubliables dans une ambiance chaleureuse et conviviale."
   },
   {
@@ -41,6 +47,10 @@ const events: EventProps[] = [
     location: "Lyon",
     category: "Sport",
     price: "120€",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1531315630201-bb15abeb1653?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1562552052-c2a9512c9b38?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Assistez à ce tournoi international de tennis où les meilleurs joueurs du monde s'affrontent dans des matchs palpitants. Vivez l'excitation de chaque échange et soutenez vos joueurs favoris dans cette compétition de haut niveau."
   },
   {
@@ -52,6 +62,10 @@ const events: EventProps[] = [
     location: "Marseille",
     category: "Culture",
     price: "25€",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1594971475674-bea5c94272c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Découvrez les œuvres fascinantes d'artistes contemporains lors de cette exposition d'art moderne. Une immersion dans l'univers créatif qui repousse les limites de l'expression artistique et vous invite à réfléchir sur notre monde actuel."
   },
   {
@@ -63,6 +77,10 @@ const events: EventProps[] = [
     location: "Bordeaux",
     category: "Concert",
     price: "75€",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Laissez-vous emporter par l'énergie électrisante de ce concert de rock live. Des guitares enflammées, des rythmes puissants et une atmosphère survoltée vous attendent pour une soirée inoubliable pleine d'émotions et de passion musicale."
   },
   {
@@ -74,6 +92,10 @@ const events: EventProps[] = [
     location: "Lille",
     category: "Spectacle",
     price: "45€",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1566840570210-d9cad6e40266?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1572959654331-21d3c7f5a7c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Émerveillez-vous devant les prouesses extraordinaires des artistes du Cirque du Monde. Acrobaties vertigineuses, numéros poétiques et performances à couper le souffle se succèdent dans ce spectacle féérique qui ravira petits et grands."
   },
   {
@@ -86,6 +108,10 @@ const events: EventProps[] = [
     category: "Sport",
     price: "95€",
     featured: true,
+    additionalImages: [
+      "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1571741443338-33ab6b9d6670?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Vivez l'excitation de la finale de la Coupe de Football Nationale. L'ambiance électrique du stade, les actions décisives et la tension palpable d'un match qui promet d'entrer dans l'histoire du sport français."
   },
   {
@@ -97,6 +123,10 @@ const events: EventProps[] = [
     location: "Nice",
     category: "Festival",
     price: "65€",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1504680177321-2e6a879aac86?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1642137928093-accdb425c4f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Dansez jusqu'au bout de la nuit lors de ce festival électronique incontournable. Les meilleurs DJs internationaux, des jeux de lumières spectaculaires et une ambiance survoltée vous promettent une expérience sensorielle complète."
   },
   {
@@ -108,6 +138,10 @@ const events: EventProps[] = [
     location: "Toulouse",
     category: "Conférence",
     price: "150€",
+    additionalImages: [
+      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1558403194-611308249627?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Explorez les technologies de demain lors de cette conférence animée par des experts visionnaires. Intelligence artificielle, réalité virtuelle et innovations disruptives sont au programme de cet événement incontournable pour les passionnés de tech."
   },
   {
@@ -120,6 +154,10 @@ const events: EventProps[] = [
     category: "Spectacle",
     price: "110€",
     featured: true,
+    additionalImages: [
+      "https://images.unsplash.com/photo-1616355426572-7e89f2ac5637?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+    ],
     description: "Laissez-vous transporter par la grâce et l'élégance des danseurs de ce ballet classique international. Des chorégraphies emblématiques interprétées par des artistes d'exception dans un cadre somptueux pour une soirée placée sous le signe de la beauté."
   }
 ];
@@ -127,6 +165,7 @@ const events: EventProps[] = [
 const EventDetail = () => {
   const { id } = useParams<{ id: string }>();
   const eventId = parseInt(id || "0");
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
   const event = events.find(event => event.id === eventId);
   
@@ -149,6 +188,8 @@ const EventDetail = () => {
       </div>
     );
   }
+  
+  const allImages = [event.image, ...(event.additionalImages || [])];
   
   return (
     <div className="min-h-screen bg-rich-black flex flex-col">
@@ -239,19 +280,47 @@ const EventDetail = () => {
               <TicketSelection basePrice={event.price} />
             </div>
             
-            {/* Right Column - Event Image */}
+            {/* Right Column - Event Image Gallery */}
             <div>
-              <div className="rounded-lg overflow-hidden h-[500px] shadow-xl">
+              <div className="rounded-lg overflow-hidden shadow-xl mb-6">
                 <img 
                   src={event.image} 
                   alt={event.title}
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  className="w-full h-[400px] object-cover transition-transform duration-700 hover:scale-105"
+                  onClick={() => setSelectedImage(event.image)}
                 />
               </div>
               
-              {/* Additional event info or gallery could go here */}
+              {/* Additional Images Gallery */}
+              {event.additionalImages && event.additionalImages.length > 0 && (
+                <div className="grid grid-cols-2 gap-4">
+                  {event.additionalImages.map((image, index) => (
+                    <div 
+                      key={index} 
+                      className="rounded-lg overflow-hidden shadow-lg cursor-pointer"
+                      onClick={() => setSelectedImage(image)}
+                    >
+                      <img 
+                        src={image} 
+                        alt={`${event.title} - ${index + 1}`}
+                        className="w-full h-48 object-cover transition-transform duration-500 hover:scale-110"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
+          
+          {/* Full Image Gallery */}
+          {selectedImage && (
+            <ImageGallery 
+              images={allImages}
+              selectedImage={selectedImage}
+              onClose={() => setSelectedImage(null)}
+              onSelect={(image) => setSelectedImage(image)}
+            />
+          )}
         </div>
       </div>
       

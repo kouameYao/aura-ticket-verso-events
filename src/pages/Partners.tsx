@@ -10,42 +10,42 @@ const Partners = () => {
   const partners = [
     {
       name: "Festival de Cannes",
-      logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/d/d9/Logo_Festival_de_Cannes.svg/800px-Logo_Festival_de_Cannes.svg.png",
+      logo: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Culture"
     },
     {
       name: "Roland Garros",
-      logo: "https://upload.wikimedia.org/wikipedia/en/thumb/7/79/Roland_Garros.svg/1200px-Roland_Garros.svg.png",
+      logo: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Sport"
     },
     {
       name: "Stade de France",
-      logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/1/1d/Logo_Stade_de_France_2016.svg/1200px-Logo_Stade_de_France_2016.svg.png",
+      logo: "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Sport"
     },
     {
       name: "Olympia",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/L%27Olympia_logo.svg/2560px-L%27Olympia_logo.svg.png",
+      logo: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Concert"
     },
     {
       name: "Opéra National de Paris",
-      logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/e/e8/Opera_de_Paris_logo.svg/1200px-Opera_de_Paris_logo.svg.png",
+      logo: "https://images.unsplash.com/photo-1537365587684-f490dff69498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Culture"
     },
     {
       name: "Parc des Princes",
-      logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/d/d4/Logo_Parc_des_Princes.svg/1200px-Logo_Parc_des_Princes.svg.png",
+      logo: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Sport"
     },
     {
       name: "Théâtre du Châtelet",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Logo-chatelet.svg/1200px-Logo-chatelet.svg.png",
+      logo: "https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Culture"
     },
     {
       name: "AccorHotels Arena",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Accor_Arena_logo.svg/2560px-Accor_Arena_logo.svg.png",
+      logo: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Concert"
     }
   ];

@@ -16,6 +16,7 @@ export interface EventProps {
   price: string;
   featured?: boolean;
   description?: string;
+  additionalImages?: string[];
 }
 
 const EventCard = ({ event }: { event: EventProps }) => {

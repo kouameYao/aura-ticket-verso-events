@@ -17,7 +17,12 @@ const FeaturedEvents = () => {
       location: "Paris",
       category: "Concert",
       price: "89€",
-      featured: true
+      featured: true,
+      additionalImages: [
+        "https://images.unsplash.com/photo-1498036882173-b41c28a8ba34?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        "https://images.unsplash.com/photo-1511192336575-5a79af67a629?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+      ],
+      description: "Plongez dans l'univers envoûtant du jazz et de la soul lors de ce festival exceptionnel. Des artistes de renommée mondiale se réunissent pour vous offrir des performances inoubliables dans une ambiance chaleureuse et conviviale."
     },
     {
       id: 6,
@@ -28,7 +33,12 @@ const FeaturedEvents = () => {
       location: "Paris",
       category: "Sport",
       price: "95€",
-      featured: true
+      featured: true,
+      additionalImages: [
+        "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        "https://images.unsplash.com/photo-1571741443338-33ab6b9d6670?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+      ],
+      description: "Vivez l'excitation de la finale de la Coupe de Football Nationale. L'ambiance électrique du stade, les actions décisives et la tension palpable d'un match qui promet d'entrer dans l'histoire du sport français."
     },
     {
       id: 9,
@@ -39,7 +49,12 @@ const FeaturedEvents = () => {
       location: "Strasbourg",
       category: "Spectacle",
       price: "110€",
-      featured: true
+      featured: true,
+      additionalImages: [
+        "https://images.unsplash.com/photo-1616355426572-7e89f2ac5637?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+      ],
+      description: "Laissez-vous transporter par la grâce et l'élégance des danseurs de ce ballet classique international. Des chorégraphies emblématiques interprétées par des artistes d'exception dans un cadre somptueux pour une soirée placée sous le signe de la beauté."
     }
   ];
 
