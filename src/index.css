@@ -1,6 +1,5 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -52,17 +51,17 @@
   .glassmorphism {
     @apply bg-black/30 backdrop-blur-md border border-white/10;
   }
-  
+
   .glassmorphism-light {
     @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
-  
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-bordeaux to-gold;
   }
-  
+
   .text-stroke {
-    -webkit-text-stroke: 1px theme('colors.gold');
+    -webkit-text-stroke: 1px theme("colors.gold");
     paint-order: stroke fill;
   }
 }

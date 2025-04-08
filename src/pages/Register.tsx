@@ -1,35 +1,49 @@
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ArrowLeft, Eye, EyeOff, UserPlus } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
 
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { ArrowLeft, Eye, EyeOff, UserPlus } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
-import { Checkbox } from '@/components/ui/checkbox';
-import { supabase } from '@/integrations/supabase/client';
-
-const registerSchema = z.object({
-  firstName: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
-  lastName: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
-  email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
-  password: z.string().min(8, { 
-    message: "Le mot de passe doit contenir au moins 8 caractères" 
-  }),
-  confirmPassword: z.string(),
-  isOrganizer: z.boolean().default(false),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: "Vous devez accepter les conditions générales",
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Les mots de passe ne correspondent pas",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
+    lastName: z
+      .string()
+      .min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
+    email: z
+      .string()
+      .email({ message: "Veuillez entrer une adresse email valide" }),
+    password: z.string().min(8, {
+      message: "Le mot de passe doit contenir au moins 8 caractères",
+    }),
+    confirmPassword: z.string(),
+    isOrganizer: z.boolean().default(false),
+    acceptTerms: z.boolean().refine((val) => val === true, {
+      message: "Vous devez accepter les conditions générales",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -39,19 +53,19 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     // Check if user is already logged in
     const checkSession = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        navigate('/');
+        navigate("/");
       }
     };
-    
+
     checkSession();
   }, [navigate]);
-  
+
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -62,13 +76,13 @@ const Register = () => {
       confirmPassword: "",
       isOrganizer: false,
       acceptTerms: false,
-    }
+    },
   });
-  
+
   const onSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
-      
+
       const { error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -76,11 +90,11 @@ const Register = () => {
           data: {
             firstName: data.firstName,
             lastName: data.lastName,
-            isOrganizer: data.isOrganizer
-          }
-        }
+            isOrganizer: data.isOrganizer,
+          },
+        },
       });
-      
+
       if (error) {
         toast({
           title: "Erreur d'inscription",
@@ -89,34 +103,34 @@ const Register = () => {
         });
         return;
       }
-      
+
       toast({
         title: "Compte créé avec succès",
-        description: data.isOrganizer 
+        description: data.isOrganizer
           ? "Votre compte organisateur a été créé. Vérifiez votre email pour activer votre compte."
           : "Votre compte a été créé. Vérifiez votre email pour activer votre compte.",
         variant: "default",
       });
-      
-      setTimeout(() => navigate('/login'), 2000);
-      
+
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       console.error("Registration error:", error);
       toast({
         title: "Erreur",
-        description: "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
+        description:
+          "Une erreur s'est produite lors de l'inscription. Veuillez réessayer.",
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-rich-black flex flex-col">
       <Navbar />
-      
-      <div className="flex-1 py-12">
+
+      <div className="flex-1 py-12 mt-10">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto glassmorphism rounded-lg p-8">
             <div className="text-center mb-6">
@@ -124,12 +138,16 @@ const Register = () => {
                 <span className="text-gradient">Créer un compte</span>
               </h1>
               <p className="text-off-white/70">
-                Rejoignez AuraTickets pour réserver ou créer vos propres événements
+                Rejoignez AuraTickets pour réserver ou créer vos propres
+                événements
               </p>
             </div>
-            
+
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
@@ -138,9 +156,9 @@ const Register = () => {
                       <FormItem>
                         <FormLabel className="text-off-white">Prénom</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Jean" 
-                            {...field} 
+                          <Input
+                            placeholder="Jean"
+                            {...field}
                             className="bg-black/30 border-titanium/30 text-off-white"
                           />
                         </FormControl>
@@ -148,7 +166,7 @@ const Register = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="lastName"
@@ -156,9 +174,9 @@ const Register = () => {
                       <FormItem>
                         <FormLabel className="text-off-white">Nom</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Dupont" 
-                            {...field} 
+                          <Input
+                            placeholder="Dupont"
+                            {...field}
                             className="bg-black/30 border-titanium/30 text-off-white"
                           />
                         </FormControl>
@@ -167,7 +185,7 @@ const Register = () => {
                     )}
                   />
                 </div>
-                
+
                 <FormField
                   control={form.control}
                   name="email"
@@ -175,10 +193,10 @@ const Register = () => {
                     <FormItem>
                       <FormLabel className="text-off-white">Email</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="votre@email.com" 
+                        <Input
+                          placeholder="votre@email.com"
                           type="email"
-                          {...field} 
+                          {...field}
                           className="bg-black/30 border-titanium/30 text-off-white"
                         />
                       </FormControl>
@@ -186,26 +204,28 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-off-white">Mot de passe</FormLabel>
+                        <FormLabel className="text-off-white">
+                          Mot de passe
+                        </FormLabel>
                         <div className="relative">
                           <FormControl>
-                            <Input 
-                              type={showPassword ? "text" : "password"} 
-                              placeholder="••••••••" 
-                              {...field} 
+                            <Input
+                              type={showPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...field}
                               className="bg-black/30 border-titanium/30 text-off-white pr-10"
                             />
                           </FormControl>
-                          <Button 
+                          <Button
                             type="button"
-                            variant="ghost" 
+                            variant="ghost"
                             size="sm"
                             className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-off-white/70 hover:text-gold"
                             onClick={() => setShowPassword(!showPassword)}
@@ -221,28 +241,32 @@ const Register = () => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-off-white">Confirmer le mot de passe</FormLabel>
+                        <FormLabel className="text-off-white">
+                          Confirmer le mot de passe
+                        </FormLabel>
                         <div className="relative">
                           <FormControl>
-                            <Input 
-                              type={showConfirmPassword ? "text" : "password"} 
-                              placeholder="••••••••" 
-                              {...field} 
+                            <Input
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder="••••••••"
+                              {...field}
                               className="bg-black/30 border-titanium/30 text-off-white pr-10"
                             />
                           </FormControl>
-                          <Button 
+                          <Button
                             type="button"
-                            variant="ghost" 
+                            variant="ghost"
                             size="sm"
                             className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-off-white/70 hover:text-gold"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
                           >
                             {showConfirmPassword ? (
                               <EyeOff className="h-4 w-4" />
@@ -256,7 +280,7 @@ const Register = () => {
                     )}
                   />
                 </div>
-                
+
                 <FormField
                   control={form.control}
                   name="isOrganizer"
@@ -277,7 +301,7 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="acceptTerms"
@@ -292,16 +316,26 @@ const Register = () => {
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-off-white">
-                          J'accepte les <Link to="/cgu" className="text-gold hover:underline">conditions générales</Link> et la <Link to="/privacy" className="text-gold hover:underline">politique de confidentialité</Link>
+                          J'accepte les{" "}
+                          <Link to="/cgu" className="text-gold hover:underline">
+                            conditions générales
+                          </Link>{" "}
+                          et la{" "}
+                          <Link
+                            to="/privacy"
+                            className="text-gold hover:underline"
+                          >
+                            politique de confidentialité
+                          </Link>
                         </FormLabel>
                         <FormMessage />
                       </div>
                     </FormItem>
                   )}
                 />
-                
-                <Button 
-                  type="submit" 
+
+                <Button
+                  type="submit"
                   className="w-full bg-gold text-rich-black hover:bg-gold/80 flex items-center justify-center gap-2"
                   disabled={isLoading}
                 >
@@ -316,13 +350,20 @@ const Register = () => {
                 </Button>
               </form>
             </Form>
-            
+
             <div className="mt-6 pt-6 border-t border-titanium/20 text-center">
               <p className="text-off-white/70 mb-4">
                 Vous avez déjà un compte?
               </p>
-              <Button variant="outline" className="w-full border-gold text-gold hover:bg-gold/20" asChild>
-                <Link to="/login" className="flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                className="w-full border-gold text-gold hover:bg-gold/20"
+                asChild
+              >
+                <Link
+                  to="/login"
+                  className="flex items-center justify-center gap-2"
+                >
                   <ArrowLeft className="h-4 w-4" />
                   Se connecter
                 </Link>
@@ -331,7 +372,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );
