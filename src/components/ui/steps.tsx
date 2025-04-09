@@ -31,9 +31,9 @@ export function Steps({ steps, currentStep, className }: StepsProps) {
                   className={cn(
                     "relative z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 shrink-0",
                     isCompleted
-                      ? "bg-purple-600 border-purple-600 text-white"
+                      ? "bg-bordeaux border-bordeaux text-white"
                       : isCurrent
-                      ? "bg-purple-800 border-purple-400 text-white"
+                      ? "bg-bordeaux/80 border-gold text-white"
                       : "bg-transparent border-gray-400/50 text-gray-400/50"
                   )}
                 >
@@ -49,7 +49,7 @@ export function Steps({ steps, currentStep, className }: StepsProps) {
                   <div 
                     className={cn(
                       "hidden md:block absolute top-6 h-0.5 w-full left-1/2",
-                      isCompleted ? "bg-purple-600" : "bg-gray-400/30"
+                      isCompleted ? "bg-bordeaux" : "bg-gray-400/30"
                     )}
                   ></div>
                 )}
@@ -60,7 +60,7 @@ export function Steps({ steps, currentStep, className }: StepsProps) {
                 <p
                   className={cn(
                     "text-sm font-bold",
-                    isCurrent ? "text-purple-400" : isCompleted ? "text-white" : "text-gray-400/50"
+                    isCurrent ? "text-gold" : isCompleted ? "text-white" : "text-gray-400/50"
                   )}
                 >
                   {step.title}

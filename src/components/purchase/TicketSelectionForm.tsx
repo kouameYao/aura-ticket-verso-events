@@ -64,78 +64,78 @@ const TicketSelectionForm: React.FC<TicketSelectionFormProps> = ({ initialData, 
 
   return (
     <div>
-      <h2 className="text-2xl font-playfair font-bold text-gold mb-6">Sélection de billets</h2>
+      <h2 className="text-2xl font-playfair font-bold text-gold mb-6 flex items-center">
+        <Ticket className="h-6 w-6 mr-2 text-gold" />
+        Sélection de billets
+      </h2>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Ticket className="h-5 w-5 text-gold" />
-            <h3 className="font-medium text-lg text-off-white">Réservez votre billet</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="ticketType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-off-white">Type de billet</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="bg-rich-black/60 border-titanium/30 focus:border-gold text-off-white">
+                        <SelectValue placeholder="Choisir un type de billet" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-rich-black border border-titanium/30">
+                      {ticketCategories.map((category) => (
+                        <SelectItem key={category.name} value={category.name}>
+                          {category.name} - {category.price}€
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-off-white">Quantité</FormLabel>
+                  <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value.toString()}>
+                    <FormControl>
+                      <SelectTrigger className="bg-rich-black/60 border-titanium/30 focus:border-gold text-off-white">
+                        <SelectValue placeholder="Choisir une quantité" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-rich-black border border-titanium/30">
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                        <SelectItem key={num} value={num.toString()}>
+                          {num}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
-          <FormField
-            control={form.control}
-            name="ticketType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-off-white">Type de billet</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="bg-transparent border-titanium/30 focus:border-gold text-off-white">
-                      <SelectValue placeholder="Choisir un type de billet" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-rich-black border border-titanium/30">
-                    {ticketCategories.map((category) => (
-                      <SelectItem key={category.name} value={category.name}>
-                        {category.name} - {category.price}€
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="quantity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-off-white">Quantité</FormLabel>
-                <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value.toString()}>
-                  <FormControl>
-                    <SelectTrigger className="bg-transparent border-titanium/30 focus:border-gold text-off-white">
-                      <SelectValue placeholder="Choisir une quantité" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-rich-black border border-titanium/30">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                      <SelectItem key={num} value={num.toString()}>
-                        {num}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="pt-4 border-t border-titanium/20">
-            <div className="flex justify-between mb-4">
-              <span className="text-off-white/80">Total:</span>
-              <span className="font-bold text-gold">{totalPrice}€</span>
+          <div className="mt-6 pt-4 border-t border-titanium/20">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-off-white/80 text-lg">Total:</span>
+              <span className="font-bold text-gold text-2xl">{totalPrice}€</span>
             </div>
           </div>
 
           <Button 
             type="submit" 
-            className="w-full bg-bordeaux hover:bg-bordeaux/80 text-off-white flex items-center justify-center gap-2"
+            className="w-full bg-bordeaux hover:bg-bordeaux/80 text-off-white flex items-center justify-center gap-2 py-6 text-lg"
           >
             Continuer
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-5 w-5" />
           </Button>
         </form>
       </Form>
