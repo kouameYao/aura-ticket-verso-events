@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Ticket, Plus, Minus, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface TicketSelectionProps {
   basePrice: string; // Format: "89€"
@@ -19,10 +20,16 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
 }) => {
   const [ticketType, setTicketType] = useState<string>("Standard");
   const [quantity, setQuantity] = useState<number>(1);
+  const navigate = useNavigate();
+  const { id } = useParams();
   
   const selectedCategory = categories.find(cat => cat.name === ticketType) || categories[0];
   const price = parseInt(selectedCategory.price);
   const total = price * quantity;
+  
+  const handleReserveClick = () => {
+    navigate(`/event/${id}/purchase`);
+  };
 
   return (
     <div className="glassmorphism p-6 rounded-lg">
@@ -77,7 +84,10 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
             <span className="font-bold text-gold">{total}€</span>
           </div>
           
-          <Button className="w-full bg-bordeaux hover:bg-bordeaux/80 text-off-white gap-2">
+          <Button 
+            className="w-full bg-bordeaux hover:bg-bordeaux/80 text-off-white gap-2"
+            onClick={handleReserveClick}
+          >
             <ShoppingCart className="h-4 w-4" />
             Réserver maintenant
           </Button>
