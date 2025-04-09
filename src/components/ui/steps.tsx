@@ -17,47 +17,50 @@ interface StepsProps {
 export function Steps({ steps, currentStep, className }: StepsProps) {
   return (
     <div className={cn("w-full", className)}>
-      <div className="flex justify-between">
+      <div className="flex flex-col md:flex-row justify-between">
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep;
 
           return (
-            <div key={index} className="flex flex-col items-center relative">
-              {/* Step connector line */}
-              {index < steps.length - 1 && (
+            <div key={index} className="flex flex-row md:flex-col items-start relative mb-4 md:mb-0 md:items-center">
+              {/* Horizontal connector on mobile, vertical on desktop */}
+              <div className="flex items-center md:flex-col relative w-full">
+                {/* Step indicator */}
                 <div
                   className={cn(
-                    "absolute top-5 w-full h-1 left-1/2",
-                    isCompleted ? "bg-gold" : "bg-titanium/30"
+                    "relative z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 shrink-0",
+                    isCompleted
+                      ? "bg-purple-600 border-purple-600 text-white"
+                      : isCurrent
+                      ? "bg-purple-800 border-purple-400 text-white"
+                      : "bg-transparent border-gray-400/50 text-gray-400/50"
                   )}
-                ></div>
-              )}
-              
-              {/* Step indicator */}
-              <div
-                className={cn(
-                  "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2",
-                  isCompleted
-                    ? "bg-gold border-gold text-rich-black"
-                    : isCurrent
-                    ? "bg-bordeaux border-gold text-off-white"
-                    : "bg-transparent border-titanium/50 text-titanium/50"
-                )}
-              >
-                {isCompleted ? (
-                  <CheckCircle className="h-6 w-6" />
-                ) : (
-                  <span className="text-sm font-medium">{index + 1}</span>
+                >
+                  {isCompleted ? (
+                    <CheckCircle className="h-6 w-6" />
+                  ) : (
+                    <span className="text-sm font-medium">{index + 1}</span>
+                  )}
+                </div>
+
+                {/* Step connector line */}
+                {index < steps.length - 1 && (
+                  <div 
+                    className={cn(
+                      "hidden md:block absolute top-6 h-0.5 w-full left-1/2",
+                      isCompleted ? "bg-purple-600" : "bg-gray-400/30"
+                    )}
+                  ></div>
                 )}
               </div>
               
-              {/* Step title and description */}
-              <div className="mt-3 text-center max-w-[120px] mx-auto">
+              {/* Step content */}
+              <div className="ml-4 md:ml-0 md:mt-3 md:text-center max-w-[180px]">
                 <p
                   className={cn(
-                    "text-sm font-medium",
-                    isCurrent ? "text-gold" : isCompleted ? "text-off-white" : "text-titanium/50"
+                    "text-sm font-bold",
+                    isCurrent ? "text-purple-400" : isCompleted ? "text-white" : "text-gray-400/50"
                   )}
                 >
                   {step.title}
@@ -65,7 +68,7 @@ export function Steps({ steps, currentStep, className }: StepsProps) {
                 <p
                   className={cn(
                     "text-xs mt-1",
-                    isCurrent || isCompleted ? "text-off-white/70" : "text-titanium/50"
+                    isCurrent || isCompleted ? "text-white/70" : "text-gray-400/50"
                   )}
                 >
                   {step.description}

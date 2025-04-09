@@ -28,13 +28,15 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
   const total = price * quantity;
   
   const handleReserveClick = () => {
-    navigate(`/event/${id}/purchase`);
+    if (id) {
+      navigate(`/event/${id}/purchase`);
+    }
   };
 
   return (
     <div className="glassmorphism p-6 rounded-lg">
       <div className="flex items-center gap-2 mb-4">
-        <Ticket className="h-5 w-5 text-gold" />
+        <Ticket className="h-5 w-5 text-purple-400" />
         <h3 className="font-medium text-lg text-off-white">Réservez votre billet</h3>
       </div>
       
@@ -42,7 +44,7 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
         <div>
           <label className="text-sm text-off-white/80 mb-1 block">Type de billet</label>
           <Select onValueChange={setTicketType} defaultValue="Standard">
-            <SelectTrigger className="bg-transparent border-titanium/30 focus:border-gold w-full">
+            <SelectTrigger className="bg-transparent border-titanium/30 focus:border-purple-400 w-full">
               <SelectValue placeholder="Type de billet" />
             </SelectTrigger>
             <SelectContent className="bg-rich-black border border-titanium/30">
@@ -81,11 +83,11 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
         <div className="pt-4 border-t border-titanium/20">
           <div className="flex justify-between mb-4">
             <span className="text-off-white/80">Total:</span>
-            <span className="font-bold text-gold">{total}€</span>
+            <span className="font-bold text-purple-400">{total}€</span>
           </div>
           
           <Button 
-            className="w-full bg-bordeaux hover:bg-bordeaux/80 text-off-white gap-2"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-off-white gap-2"
             onClick={handleReserveClick}
           >
             <ShoppingCart className="h-4 w-4" />

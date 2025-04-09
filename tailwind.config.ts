@@ -63,12 +63,27 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom colors
-				bordeaux: "#750E21",
-				gold: "#D4AF37",
+				// Custom colors - nouvelles couleurs avec tons de violet
+				bordeaux: "#69264a", // Remplace l'ancienne couleur bordeaux
+				gold: "#9b87f5", // Remplace l'ancienne couleur or par un violet clair
 				titanium: "#787878",
 				'rich-black': "#1A1A1A",
 				'off-white': "#F5F5F5",
+				
+				// Nouvelle palette violette
+				purple: {
+					50: '#f5f3ff',
+					100: '#ede9fe',
+					200: '#ddd6fe',
+					300: '#c4b5fd',
+					400: '#a78bfa',
+					500: '#8b5cf6',
+					600: '#7c3aed',
+					700: '#6d28d9',
+					800: '#5b21b6',
+					900: '#4c1d95',
+					950: '#2e1065',
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -118,7 +133,7 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-				'hero-pattern': 'linear-gradient(to right bottom, rgba(117, 14, 33, 0.8), rgba(26, 26, 26, 0.9))'
+				'hero-pattern': 'linear-gradient(to right bottom, rgba(108, 40, 217, 0.8), rgba(26, 26, 26, 0.9))'
 			}
 		}
 	},
