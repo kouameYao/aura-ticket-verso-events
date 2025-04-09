@@ -73,10 +73,13 @@ const PurchaseTicket = () => {
 
       <div className="flex-1 py-20 mt-2.5">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto glassmorphism rounded-lg p-8">
-            <Steps currentStep={currentStep} steps={steps} className="mb-12" />
+          <div className="max-w-4xl mx-auto glassmorphism rounded-lg p-8 border border-gold/10">
+            <div className="mb-16">
+              <h1 className="text-3xl font-playfair font-bold text-gold mb-6 text-center">Achat de billets</h1>
+              <Steps currentStep={currentStep} steps={steps} className="mb-8" />
+            </div>
             
-            <div className="bg-black/20 rounded-lg p-6 border border-white/10">
+            <div className="bg-black/30 rounded-lg p-8 border border-titanium/20 shadow-lg">
               {currentStep === 0 && (
                 <TicketSelectionForm
                   initialData={ticketData}

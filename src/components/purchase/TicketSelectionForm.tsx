@@ -70,29 +70,29 @@ const TicketSelectionForm: React.FC<TicketSelectionFormProps> = ({ initialData, 
       </h2>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-6">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
+          <div className="grid md:grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="ticketType"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-off-white">Type de billet</FormLabel>
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-off-white text-lg">Type de billet</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="bg-rich-black/60 border-titanium/30 focus:border-gold text-off-white">
+                      <SelectTrigger className="bg-rich-black/60 border-gold/30 focus:border-gold text-off-white h-14">
                         <SelectValue placeholder="Choisir un type de billet" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-rich-black border border-titanium/30">
+                    <SelectContent className="bg-rich-black border border-gold/20">
                       {ticketCategories.map((category) => (
-                        <SelectItem key={category.name} value={category.name}>
+                        <SelectItem key={category.name} value={category.name} className="focus:bg-bordeaux/40 focus:text-gold">
                           {category.name} - {category.price}€
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -101,38 +101,38 @@ const TicketSelectionForm: React.FC<TicketSelectionFormProps> = ({ initialData, 
               control={form.control}
               name="quantity"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-off-white">Quantité</FormLabel>
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-off-white text-lg">Quantité</FormLabel>
                   <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value.toString()}>
                     <FormControl>
-                      <SelectTrigger className="bg-rich-black/60 border-titanium/30 focus:border-gold text-off-white">
+                      <SelectTrigger className="bg-rich-black/60 border-gold/30 focus:border-gold text-off-white h-14">
                         <SelectValue placeholder="Choisir une quantité" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-rich-black border border-titanium/30">
+                    <SelectContent className="bg-rich-black border border-gold/20">
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <SelectItem key={num} value={num.toString()}>
+                        <SelectItem key={num} value={num.toString()} className="focus:bg-bordeaux/40 focus:text-gold">
                           {num}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="mt-6 pt-4 border-t border-titanium/20">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-off-white/80 text-lg">Total:</span>
-              <span className="font-bold text-gold text-2xl">{totalPrice}€</span>
+          <div className="mt-8 pt-6 border-t border-gold/20">
+            <div className="flex justify-between items-center mb-6">
+              <span className="text-off-white/80 text-xl">Total:</span>
+              <span className="font-bold text-gold text-3xl">{totalPrice}€</span>
             </div>
           </div>
 
           <Button 
             type="submit" 
-            className="w-full bg-bordeaux hover:bg-bordeaux/80 text-off-white flex items-center justify-center gap-2 py-6 text-lg"
+            className="w-full bg-bordeaux hover:bg-bordeaux/90 text-off-white flex items-center justify-center gap-2 py-6 text-lg"
           >
             Continuer
             <ArrowRight className="h-5 w-5" />
