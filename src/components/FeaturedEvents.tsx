@@ -78,7 +78,7 @@ const FeaturedEvents = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredEvents.map((event, index) => (
-            <Link to={`/event/${event.id}`} key={event.id} className="group">
+            <Link to={`/events/${event.id}`} key={event.id} className="group">
               <div className="bg-black/30 rounded-lg overflow-hidden glassmorphism-light hover:border-gold transition-all h-full flex flex-col">
                 <div className="relative h-64 overflow-hidden">
                   <img

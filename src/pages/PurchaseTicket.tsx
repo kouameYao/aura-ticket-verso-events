@@ -1,12 +1,11 @@
-
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Steps } from "@/components/ui/steps";
 import TicketSelectionForm from "@/components/purchase/TicketSelectionForm";
 import PaymentMethodForm from "@/components/purchase/PaymentMethodForm";
 import PaymentConfirmation from "@/components/purchase/PaymentConfirmation";
+import { Stepper } from "react-form-stepper";
 
 export type TicketData = {
   eventId: number | string;
@@ -44,7 +43,10 @@ const PurchaseTicket = () => {
   });
 
   const steps = [
-    { title: "Sélection des billets", description: "Choisir le type et quantité" },
+    {
+      title: "Sélection des billets",
+      description: "Choisir le type et quantité",
+    },
     { title: "Méthode de paiement", description: "Choisir comment payer" },
     { title: "Confirmation", description: "Finaliser votre achat" },
   ];
@@ -64,7 +66,7 @@ const PurchaseTicket = () => {
   };
 
   const handlePaymentComplete = () => {
-    navigate(`/event/${id}?purchase=success`);
+    navigate(`/events/${id}?purchase=success`);
   };
 
   return (
@@ -75,10 +77,32 @@ const PurchaseTicket = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto glassmorphism rounded-lg p-8 border border-gold/10">
             <div className="mb-16">
-              <h1 className="text-3xl font-playfair font-bold text-gold mb-6 text-center">Achat de billets</h1>
-              <Steps currentStep={currentStep} steps={steps} className="mb-8" />
+              <h1 className="text-3xl font-playfair font-bold text-gold mb-6 text-center">
+                Achat de billets
+              </h1>
+              <Stepper
+                styleConfig={{
+                  activeBgColor: "#FFD700",
+                  activeTextColor: "#000000",
+                  completedBgColor: "#8b0000",
+                  completedTextColor: "#FFFFFF",
+                  inactiveBgColor: "#D3D3D3",
+                  inactiveTextColor: "#A9A9A9",
+                  size: "3em",
+                  circleFontSize: "1.3em",
+                  labelFontSize: "0.875em",
+                  borderRadius: "50%",
+                  fontWeight: "bold",
+                }}
+                steps={[
+                  { label: "Sélection des billets" },
+                  { label: "Méthode de paiement" },
+                  { label: "Confirmation" },
+                ]}
+                activeStep={currentStep}
+              />
             </div>
-            
+
             <div className="bg-black/30 rounded-lg p-8 border border-titanium/20 shadow-lg">
               {currentStep === 0 && (
                 <TicketSelectionForm

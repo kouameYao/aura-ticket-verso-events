@@ -52,7 +52,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Accueil", href: "/" },
     { name: "Événements", href: "/#events" },
-    { name: "À propos", href: "/about" },
+    // { name: "À propos", href: "/about" },
     { name: "Comment ça marche", href: "/how-it-works" },
     { name: "FAQ", href: "/faq" },
     { name: "Contact", href: "/contact" },
@@ -94,9 +94,6 @@ const Navbar = () => {
 
           {/* Desktop Right Icons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="hover:text-gold">
-              <Search className="h-5 w-5" />
-            </Button>
             {session ? (
               <>
                 <Button variant="ghost" size="icon" className="hover:text-gold">
@@ -153,9 +150,6 @@ const Navbar = () => {
                 </Link>
               ))}
               <div className="pt-4 flex items-center justify-between border-t border-white/10">
-                <Button variant="ghost" size="icon" className="hover:text-gold">
-                  <Search className="h-5 w-5" />
-                </Button>
                 {session ? (
                   <>
                     <Button

@@ -35,14 +35,14 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
 
   const handleReserveClick = () => {
     if (id) {
-      navigate(`/event/${id}/purchase`);
+      navigate(`/events/${id}/purchase`);
     }
   };
 
   return (
     <div className="glassmorphism p-6 rounded-lg">
       <div className="flex items-center gap-2 mb-4">
-        <Ticket className="h-5 w-5 text-purple-400" />
+        <Ticket className="h-5 w-5 text-gold" />
         <h3 className="font-medium text-lg text-off-white">
           Réservez votre billet
         </h3>
@@ -95,11 +95,11 @@ const TicketSelection: React.FC<TicketSelectionProps> = ({
         <div className="pt-4 border-t border-titanium/20">
           <div className="flex justify-between mb-4">
             <span className="text-off-white/80">Total:</span>
-            <span className="font-bold text-purple-400">{total}€</span>
+            <span className="font-bold text-gold">{total}€</span>
           </div>
 
           <Button
-            className="w-full bg-purple-600 hover:bg-purple-700 text-off-white gap-2"
+            className="w-full bg-bordeaux/60 hover:bg-bordeaux/70 text-off-white gap-2"
             onClick={handleReserveClick}
           >
             <ShoppingCart className="h-4 w-4" />

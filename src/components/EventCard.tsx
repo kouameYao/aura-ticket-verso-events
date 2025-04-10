@@ -20,7 +20,7 @@ export interface EventProps {
 
 const EventCard = ({ event }: { event: EventProps }) => {
   return (
-    <Link to={`/event/${event.id}`} className="block">
+    <Link to={`/events/${event.id}`} className="block">
       <Card
         className={`overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-gold/20 ${
           event.featured ? "border border-gold/30" : "border-titanium/20"

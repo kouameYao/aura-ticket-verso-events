@@ -7,6 +7,8 @@ import {
   Mail,
   Phone,
   MapPin,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -29,7 +31,7 @@ const Footer = () => {
     {
       title: "Informations",
       links: [
-        { name: "À propos", href: "/about" },
+        // { name: "À propos", href: "/about" },
         { name: "Comment ça marche", href: "/how-it-works" },
         { name: "FAQ", href: "/faq" },
         { name: "Contact", href: "/contact" },
@@ -48,10 +50,10 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: "Facebook", icon: <FacebookIcon className="h-5 w-5" />, href: "#" },
+    { name: "Facebook", icon: <Facebook className="h-5 w-5" />, href: "#" },
     {
       name: "Instagram",
-      icon: <InstagramIcon className="h-5 w-5" />,
+      icon: <Instagram className="h-5 w-5" />,
       href: "#",
     },
     { name: "Twitter", icon: <TwitterIcon className="h-5 w-5" />, href: "#" },
