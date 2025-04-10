@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Link } from "react-router-dom";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -221,9 +222,11 @@ const Contact = () => {
             répondu. Consultez notre FAQ pour trouver rapidement les
             informations dont vous avez besoin.
           </p>
-          <Button className="bg-gold text-rich-black hover:bg-gold/80">
-            Voir la FAQ
-          </Button>
+          <Link to="/faq">
+            <Button className="bg-gold text-rich-black hover:bg-gold/80">
+              Voir la FAQ
+            </Button>
+          </Link>
         </div>
       </section>
 

@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect } from 'react';
-import { Clock } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Clock } from "lucide-react";
 
 interface EventTimerProps {
   eventDate: string; // Format: "DD Month YYYY"
@@ -17,15 +16,25 @@ const EventTimer: React.FC<EventTimerProps> = ({ eventDate, eventTime }) => {
 
   useEffect(() => {
     // Parse the date and time
-    const [day, month, year] = eventDate.split(' ');
-    const [hour, minute] = eventTime.split(':');
-    
+    const [day, month, year] = eventDate.split(" ");
+    const [hour, minute] = eventTime.split(":");
+
     // French month names to numbers
     const monthMap: Record<string, number> = {
-      'Janvier': 0, 'Février': 1, 'Mars': 2, 'Avril': 3, 'Mai': 4, 'Juin': 5,
-      'Juillet': 6, 'Août': 7, 'Septembre': 8, 'Octobre': 9, 'Novembre': 10, 'Décembre': 11
+      Janvier: 0,
+      Février: 1,
+      Mars: 2,
+      Avril: 3,
+      Mai: 4,
+      Juin: 5,
+      Juillet: 6,
+      Août: 7,
+      Septembre: 8,
+      Octobre: 9,
+      Novembre: 10,
+      Décembre: 11,
     };
-    
+
     const eventDateObj = new Date(
       parseInt(year),
       monthMap[month] || 0, // Default to January if not found
@@ -36,7 +45,7 @@ const EventTimer: React.FC<EventTimerProps> = ({ eventDate, eventTime }) => {
 
     const calculateTimeLeft = () => {
       const difference = eventDateObj.getTime() - new Date().getTime();
-      
+
       if (difference > 0) {
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -72,11 +81,15 @@ const EventTimer: React.FC<EventTimerProps> = ({ eventDate, eventTime }) => {
           <span className="text-xs text-off-white/70">Heures</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-2xl font-bold text-gold">{timeLeft.minutes}</span>
+          <span className="text-2xl font-bold text-gold">
+            {timeLeft.minutes}
+          </span>
           <span className="text-xs text-off-white/70">Minutes</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-2xl font-bold text-gold">{timeLeft.seconds}</span>
+          <span className="text-2xl font-bold text-gold">
+            {timeLeft.seconds}
+          </span>
           <span className="text-xs text-off-white/70">Secondes</span>
         </div>
       </div>
