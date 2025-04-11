@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, PhoneCall } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
+import { Underliner } from "@/components/customs/Underliner";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -42,10 +43,11 @@ const Contact = () => {
             <h1 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
               <span className="text-gradient">Contactez-nous</span>
             </h1>
-            <p className="text-off-white/80 text-lg md:text-xl">
+            <p className="text-off-white/80 text-lg md:text-xl mb-5">
               Une question, une suggestion ou un projet ? Notre équipe est à
               votre écoute.
             </p>
+            <Underliner icon={<PhoneCall className="text-gold mx-4" />} />
           </div>
         </div>
       </section>

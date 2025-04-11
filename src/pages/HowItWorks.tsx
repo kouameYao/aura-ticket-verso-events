@@ -8,9 +8,11 @@ import {
   CalendarCheck,
   ShareIcon,
   UserPlus,
+  HandHelping,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Underliner } from "@/components/customs/Underliner";
 
 const HowItWorks = () => {
   const steps = [
@@ -87,10 +89,11 @@ const HowItWorks = () => {
             <h1 className="font-playfair text-4xl md:text-5xl font-bold mb-6">
               <span className="text-gradient">Comment ça marche</span>
             </h1>
-            <p className="text-off-white/80 text-lg md:text-xl leading-relaxed">
+            <p className="text-off-white/80 text-lg md:text-xl leading-relaxed mb-5">
               Découvrez comment AuraTickets rend l'achat et la vente de billets
               simples, sécurisés et agréables.
             </p>
+            <Underliner icon={<HandHelping className="text-gold mx-4" />} />
           </div>
         </div>
       </section>

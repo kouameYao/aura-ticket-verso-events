@@ -1,8 +1,9 @@
 import React from "react";
 import { EventProps } from "./EventCard";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowRight, PartyPopper } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Underliner } from "./customs/Underliner";
 
 const FeaturedEvents = () => {
   // Sample featured events
@@ -70,10 +71,11 @@ const FeaturedEvents = () => {
           <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4">
             <span className="text-gradient">Événements à la une</span>
           </h2>
-          <p className="text-off-white/70 max-w-2xl mx-auto">
+          <p className="text-off-white/70 max-w-2xl mx-auto mb-5">
             Découvrez nos sélections exclusives et réservez vos places pour ces
-            expériences exceptionnelles. ///
+            expériences exceptionnelles.
           </p>
+          <Underliner icon={<PartyPopper className="text-gold mx-4" />} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

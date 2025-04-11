@@ -29,7 +29,7 @@ const RelatedEvents: React.FC<RelatedEventsProps> = ({
           <h2 className="font-playfair text-2xl md:text-3xl font-bold">
             <span className="text-gradient">Événements similaires</span>
           </h2>
-          <Link to="/">
+          <Link to="/events">
             <Button
               variant="link"
               className="text-gold hover:text-gold/80 gap-2"

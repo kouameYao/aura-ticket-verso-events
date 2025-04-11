@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import {
   Calendar,
+  CalendarDays,
   CalendarIcon,
   Filter,
   MapPin,
@@ -39,73 +39,81 @@ import { Slider } from "@/components/ui/slider";
 import { EventProps } from "@/components/EventCard";
 import { Badge } from "@/components/ui/badge";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { Underliner } from "@/components/customs/Underliner";
 
 // Données de test pour les événements
 const mockEvents: EventProps[] = [
   {
     id: 1,
     title: "Festival de Jazz de Paris",
-    image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6a3?q=80&w=1740&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6a3?q=80&w=1740&auto=format&fit=crop",
     date: "15 juin 2025",
     time: "19:00",
     location: "Parc de la Villette, Paris",
     category: "Jazz",
     price: "À partir de 45€",
     featured: true,
-    description: "Le festival de jazz le plus renommé de France avec des artistes internationaux."
+    description:
+      "Le festival de jazz le plus renommé de France avec des artistes internationaux.",
   },
   {
     id: 2,
     title: "Concert de Céline Dion",
-    image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1740&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1740&auto=format&fit=crop",
     date: "20 juillet 2025",
     time: "20:30",
     location: "AccorHotels Arena, Paris",
     category: "Pop",
-    price: "À partir de 79€"
+    price: "À partir de 79€",
   },
   {
     id: 3,
     title: "Ballet du Bolchoï",
-    image: "https://images.unsplash.com/photo-1576074087307-3e4b4421e021?q=80&w=1587&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1576074087307-3e4b4421e021?q=80&w=1587&auto=format&fit=crop",
     date: "5 août 2025",
     time: "19:30",
     location: "Opéra Garnier, Paris",
     category: "Danse",
     price: "À partir de 120€",
-    featured: true
+    featured: true,
   },
   {
     id: 4,
     title: "Festival Lollapalooza",
-    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1740&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1740&auto=format&fit=crop",
     date: "18-19 juillet 2025",
     time: "14:00",
     location: "Hippodrome de Longchamp, Paris",
     category: "Rock",
-    price: "À partir de 89€"
+    price: "À partir de 89€",
   },
   {
     id: 5,
     title: "Exposition Van Gogh",
-    image: "https://images.unsplash.com/photo-1577083552462-4aeb740319d1?q=80&w=1632&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1577083552462-4aeb740319d1?q=80&w=1632&auto=format&fit=crop",
     date: "10 juin - 15 sept 2025",
     time: "10:00 - 19:00",
     location: "Atelier des Lumières, Paris",
     category: "Exposition",
-    price: "À partir de 15€"
+    price: "À partir de 15€",
   },
   {
     id: 6,
     title: "Techno Parade",
-    image: "https://images.unsplash.com/photo-1571266028243-e1f00d3f45d0?q=80&w=1664&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1571266028243-e1f00d3f45d0?q=80&w=1664&auto=format&fit=crop",
     date: "12 septembre 2025",
     time: "12:00",
     location: "Place de la République, Paris",
     category: "Électro",
     price: "Gratuit",
-    featured: true
-  }
+    featured: true,
+  },
 ];
 
 // Catégories disponibles
@@ -121,7 +129,7 @@ const categories = [
   "Théâtre",
   "Exposition",
   "Festival",
-  "Opéra"
+  "Opéra",
 ];
 
 // Liste des artistes pour le filtre
@@ -135,7 +143,7 @@ const artists = [
   "Daft Punk",
   "Jean-Michel Jarre",
   "Ballet du Bolchoï",
-  "Orchestre de Paris"
+  "Orchestre de Paris",
 ];
 
 // Lieux pour le filtre
@@ -149,27 +157,30 @@ const venues = [
   "Opéra Garnier",
   "Théâtre du Châtelet",
   "Hippodrome de Longchamp",
-  "Atelier des Lumières"
+  "Atelier des Lumières",
 ];
 
 // Simulated API function to fetch events with pagination
-const fetchEvents = async ({ 
-  pageParam = 0, 
-  searchQuery = "", 
-  category = "Tous", 
+const fetchEvents = async ({
+  pageParam = 0,
+  searchQuery = "",
+  category = "Tous",
   location = "",
   selectedDate = undefined,
   priceRange = [0, 200],
   selectedArtists = [],
-  selectedVenues = []
+  selectedVenues = [],
 }) => {
   const PAGE_SIZE = 3;
-  
-  const filteredEvents = mockEvents.filter(event => {
-    if (searchQuery && !event.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+
+  const filteredEvents = mockEvents.filter((event) => {
+    if (
+      searchQuery &&
+      !event.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
       return false;
     }
-    
+
     if (category !== "Tous" && event.category !== category) {
       return false;
     }
@@ -178,11 +189,17 @@ const fetchEvents = async ({
       return false;
     }
 
-    if (selectedArtists.length > 0 && !selectedArtists.some(artist => event.title.includes(artist))) {
+    if (
+      selectedArtists.length > 0 &&
+      !selectedArtists.some((artist) => event.title.includes(artist))
+    ) {
       return false;
     }
 
-    if (selectedVenues.length > 0 && !selectedVenues.some(venue => event.location.includes(venue))) {
+    if (
+      selectedVenues.length > 0 &&
+      !selectedVenues.some((venue) => event.location.includes(venue))
+    ) {
       return false;
     }
 
@@ -200,13 +217,13 @@ const fetchEvents = async ({
   const start = pageParam * PAGE_SIZE;
   const end = start + PAGE_SIZE;
   const paginatedEvents = filteredEvents.slice(start, end);
-  
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
   return {
     events: paginatedEvents,
     nextPage: paginatedEvents.length === PAGE_SIZE ? pageParam + 1 : undefined,
-    totalEvents: filteredEvents.length
+    totalEvents: filteredEvents.length,
   };
 };
 
@@ -219,7 +236,7 @@ const Events = () => {
   const [priceRange, setPriceRange] = useState<number[]>([0, 200]);
   const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
   const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
-  
+
   // First get the query data
   const {
     data,
@@ -228,58 +245,81 @@ const Events = () => {
     isFetchingNextPage,
     isLoading,
     isError,
-    error
+    error,
   } = useInfiniteQuery({
-    queryKey: ['events', searchQuery, selectedCategory, selectedLocation, selectedDate, priceRange, selectedArtists, selectedVenues],
-    queryFn: ({ pageParam }) => fetchEvents({
-      pageParam,
+    queryKey: [
+      "events",
       searchQuery,
-      category: selectedCategory,
-      location: selectedLocation,
+      selectedCategory,
+      selectedLocation,
       selectedDate,
       priceRange,
       selectedArtists,
-      selectedVenues
-    }),
+      selectedVenues,
+    ],
+    queryFn: ({ pageParam }) =>
+      fetchEvents({
+        pageParam,
+        searchQuery,
+        category: selectedCategory,
+        location: selectedLocation,
+        selectedDate,
+        priceRange,
+        selectedArtists,
+        selectedVenues,
+      }),
     getNextPageParam: (lastPage) => lastPage.nextPage,
-    initialPageParam: 0
+    initialPageParam: 0,
   });
-  
+
   // Then use the variables from the query in the observer hook
   const observer = useRef<IntersectionObserver | null>(null);
   const lastEventElementRef = useCallback(
     (node: HTMLDivElement | null) => {
       if (isFetchingNextPage || !node) return;
-      
+
       if (observer.current) observer.current.disconnect();
-      
-      observer.current = new IntersectionObserver(entries => {
+
+      observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasNextPage) {
           fetchNextPage();
         }
       });
-      
+
       observer.current.observe(node);
     },
     [isFetchingNextPage, hasNextPage, fetchNextPage]
   );
-  
+
   const activeFilters = [
-    ...(selectedCategory !== "Tous" ? [{ type: "category", value: selectedCategory }] : []),
+    ...(selectedCategory !== "Tous"
+      ? [{ type: "category", value: selectedCategory }]
+      : []),
     ...(searchQuery ? [{ type: "search", value: searchQuery }] : []),
-    ...(selectedDate ? [{ type: "date", value: format(selectedDate, "dd MMM yyyy", { locale: fr }) }] : []),
-    ...(selectedLocation ? [{ type: "location", value: selectedLocation }] : []),
-    ...(priceRange[0] > 0 || priceRange[1] < 200 ? [{ type: "price", value: `${priceRange[0]}€ - ${priceRange[1]}€` }] : []),
-    ...selectedArtists.map(artist => ({ type: "artist", value: artist })),
-    ...selectedVenues.map(venue => ({ type: "venue", value: venue })),
+    ...(selectedDate
+      ? [
+          {
+            type: "date",
+            value: format(selectedDate, "dd MMM yyyy", { locale: fr }),
+          },
+        ]
+      : []),
+    ...(selectedLocation
+      ? [{ type: "location", value: selectedLocation }]
+      : []),
+    ...(priceRange[0] > 0 || priceRange[1] < 200
+      ? [{ type: "price", value: `${priceRange[0]}€ - ${priceRange[1]}€` }]
+      : []),
+    ...selectedArtists.map((artist) => ({ type: "artist", value: artist })),
+    ...selectedVenues.map((venue) => ({ type: "venue", value: venue })),
   ];
 
-  const allEvents = data?.pages.flatMap(page => page.events) || [];
+  const allEvents = data?.pages.flatMap((page) => page.events) || [];
   const totalEvents = data?.pages[0]?.totalEvents || 0;
 
   const toggleArtist = (artist: string) => {
     if (selectedArtists.includes(artist)) {
-      setSelectedArtists(selectedArtists.filter(a => a !== artist));
+      setSelectedArtists(selectedArtists.filter((a) => a !== artist));
     } else {
       setSelectedArtists([...selectedArtists, artist]);
     }
@@ -287,7 +327,7 @@ const Events = () => {
 
   const toggleVenue = (venue: string) => {
     if (selectedVenues.includes(venue)) {
-      setSelectedVenues(selectedVenues.filter(v => v !== venue));
+      setSelectedVenues(selectedVenues.filter((v) => v !== venue));
     } else {
       setSelectedVenues([...selectedVenues, venue]);
     }
@@ -321,10 +361,10 @@ const Events = () => {
         setPriceRange([0, 200]);
         break;
       case "artist":
-        setSelectedArtists(selectedArtists.filter(a => a !== value));
+        setSelectedArtists(selectedArtists.filter((a) => a !== value));
         break;
       case "venue":
-        setSelectedVenues(selectedVenues.filter(v => v !== value));
+        setSelectedVenues(selectedVenues.filter((v) => v !== value));
         break;
     }
   };
@@ -349,9 +389,10 @@ const Events = () => {
               <span className="text-gradient">Nos événements</span>
             </h1>
             <p className="text-off-white/80 text-lg mb-8">
-              Découvrez tous les événements disponibles et trouvez celui qui vous
-              correspond.
+              Découvrez tous les événements disponibles et trouvez celui qui
+              vous correspond.
             </p>
+            <Underliner icon={<CalendarDays className="text-gold mx-4" />} />
           </div>
         </div>
       </section>
@@ -431,7 +472,9 @@ const Events = () => {
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
               >
                 <SlidersHorizontal className="h-4 w-4 mr-2" />
-                {showAdvancedFilters ? "Masquer les filtres avancés" : "Filtres avancés"}
+                {showAdvancedFilters
+                  ? "Masquer les filtres avancés"
+                  : "Filtres avancés"}
               </Button>
 
               <Button
@@ -479,7 +522,10 @@ const Events = () => {
                     </h3>
                     <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                       {artists.map((artist) => (
-                        <div key={artist} className="flex items-center space-x-2">
+                        <div
+                          key={artist}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`artist-${artist}`}
                             checked={selectedArtists.includes(artist)}
@@ -504,7 +550,10 @@ const Events = () => {
                     </h3>
                     <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                       {venues.map((venue) => (
-                        <div key={venue} className="flex items-center space-x-2">
+                        <div
+                          key={venue}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`venue-${venue}`}
                             checked={selectedVenues.includes(venue)}
@@ -526,7 +575,9 @@ const Events = () => {
                 <Separator className="border-titanium/20" />
 
                 <div>
-                  <h3 className="text-gold mb-3 text-sm font-medium">Gamme de prix (€)</h3>
+                  <h3 className="text-gold mb-3 text-sm font-medium">
+                    Gamme de prix (€)
+                  </h3>
                   <div className="px-2">
                     <Slider
                       defaultValue={[0, 200]}
@@ -581,7 +632,9 @@ const Events = () => {
             <div className="flex justify-center py-16">
               <div className="animate-pulse flex flex-col items-center">
                 <div className="h-12 w-12 rounded-full border-4 border-t-gold border-r-gold/40 border-b-gold/10 border-l-gold/30 animate-spin"></div>
-                <p className="mt-4 text-off-white/80">Chargement des événements...</p>
+                <p className="mt-4 text-off-white/80">
+                  Chargement des événements...
+                </p>
               </div>
             </div>
           ) : isError ? (
@@ -599,14 +652,16 @@ const Events = () => {
           ) : allEvents.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {allEvents.map((event, index) => (
-                <div 
+                <div
                   key={`${event.id}-${index}`}
-                  ref={index === allEvents.length - 1 ? lastEventElementRef : null}
+                  ref={
+                    index === allEvents.length - 1 ? lastEventElementRef : null
+                  }
                 >
                   <EventCard event={event} />
                 </div>
               ))}
-              
+
               {isFetchingNextPage && (
                 <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center py-8">
                   <div className="h-8 w-8 rounded-full border-2 border-t-gold border-r-gold/40 border-b-gold/10 border-l-gold/30 animate-spin"></div>

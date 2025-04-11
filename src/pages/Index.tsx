@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import EventsSection from "@/components/EventsSection";
@@ -12,8 +11,8 @@ const Index = () => {
     <div className="min-h-screen bg-rich-black">
       <Navbar />
       <Hero />
-      <EventsSection />
       <FeaturedEvents />
+      <EventsSection />
       <CreatorSection />
       <CTASection />
       <Footer />

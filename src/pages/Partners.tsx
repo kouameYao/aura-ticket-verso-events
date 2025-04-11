@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,81 +14,91 @@ import {
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { Underliner } from "@/components/customs/Underliner";
 
 const Partners = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  
+
   const categories = [
     { id: "all", name: "Tous" },
     { id: "Sport", name: "Sport" },
     { id: "Culture", name: "Culture" },
     { id: "Concert", name: "Concert" },
   ];
-  
+
   const partners = [
     {
       name: "Festival de Cannes",
       logo: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Culture",
       featured: true,
-      description: "Le plus prestigieux festival de cinéma au monde, accueillant les plus grandes stars du 7ème art.",
+      description:
+        "Le plus prestigieux festival de cinéma au monde, accueillant les plus grandes stars du 7ème art.",
     },
     {
       name: "Roland Garros",
       logo: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Sport",
       featured: true,
-      description: "Tournoi international de tennis sur terre battue, l'un des quatre tournois du Grand Chelem.",
+      description:
+        "Tournoi international de tennis sur terre battue, l'un des quatre tournois du Grand Chelem.",
     },
     {
       name: "Stade de France",
       logo: "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Sport",
       featured: true,
-      description: "Plus grand stade de France, hôte de grands événements sportifs et musicaux depuis 1998.",
+      description:
+        "Plus grand stade de France, hôte de grands événements sportifs et musicaux depuis 1998.",
     },
     {
       name: "Olympia",
       logo: "https://images.unsplash.com/photo-1498936178812-4b2e558d2937?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Concert",
       featured: false,
-      description: "Salle de spectacle parisienne mythique, accueillant les plus grands artistes depuis 1893.",
+      description:
+        "Salle de spectacle parisienne mythique, accueillant les plus grands artistes depuis 1893.",
     },
     {
       name: "Opéra National de Paris",
       logo: "https://images.unsplash.com/photo-1537365587684-f490dff69498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Culture",
       featured: false,
-      description: "Institution culturelle française d'exception dédiée à l'art lyrique et à la danse.",
+      description:
+        "Institution culturelle française d'exception dédiée à l'art lyrique et à la danse.",
     },
     {
       name: "Parc des Princes",
       logo: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Sport",
       featured: false,
-      description: "Stade mythique de la capitale, antre du Paris Saint-Germain et théâtre de grands matchs.",
+      description:
+        "Stade mythique de la capitale, antre du Paris Saint-Germain et théâtre de grands matchs.",
     },
     {
       name: "Théâtre du Châtelet",
       logo: "https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Culture",
       featured: false,
-      description: "Théâtre parisien emblématique proposant une programmation variée et prestigieuse.",
+      description:
+        "Théâtre parisien emblématique proposant une programmation variée et prestigieuse.",
     },
     {
       name: "AccorHotels Arena",
       logo: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
       category: "Concert",
       featured: false,
-      description: "Grande salle multifonctionnelle accueillant concerts et événements sportifs d'envergure.",
+      description:
+        "Grande salle multifonctionnelle accueillant concerts et événements sportifs d'envergure.",
     },
   ];
-  
-  const filteredPartners = activeCategory === "all" 
-    ? partners 
-    : partners.filter(partner => partner.category === activeCategory);
-  
-  const featuredPartners = partners.filter(partner => partner.featured);
+
+  const filteredPartners =
+    activeCategory === "all"
+      ? partners
+      : partners.filter((partner) => partner.category === activeCategory);
+
+  const featuredPartners = partners.filter((partner) => partner.featured);
 
   const benefits = [
     {
@@ -117,20 +126,20 @@ const Partners = () => {
         "Obtenez des rapports analytiques complets sur les performances de vos événements et le comportement des acheteurs.",
     },
   ];
-  
+
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
-  
+
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
+    show: { opacity: 1, y: 0 },
   };
 
   return (
@@ -149,7 +158,7 @@ const Partners = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-rich-black via-rich-black/80 to-rich-black"></div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -162,11 +171,7 @@ const Partners = () => {
               Découvrez les lieux emblématiques et organisateurs prestigieux qui
               nous font confiance pour leur billetterie.
             </p>
-            <div className="flex items-center justify-center">
-              <div className="h-0.5 w-24 bg-gradient-to-r from-bordeaux to-gold"></div>
-              <Star className="text-gold mx-4" />
-              <div className="h-0.5 w-24 bg-gradient-to-l from-bordeaux to-gold"></div>
-            </div>
+            <Underliner icon={<Star className="text-gold mx-4" />} />
           </motion.div>
         </div>
       </section>
@@ -174,7 +179,7 @@ const Partners = () => {
       {/* Featured Partners */}
       <section className="py-20 bg-rich-black">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -185,10 +190,11 @@ const Partners = () => {
               <span className="text-gold">Partenaires vedettes</span>
             </h2>
             <p className="text-off-white/70 max-w-2xl mx-auto">
-              Ces lieux d'exception nous accordent leur confiance pour la billetterie de leurs événements prestigieux.
+              Ces lieux d'exception nous accordent leur confiance pour la
+              billetterie de leurs événements prestigieux.
             </p>
           </motion.div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredPartners.map((partner, index) => (
               <motion.div
@@ -219,9 +225,9 @@ const Partners = () => {
                     <p className="text-white/80 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {partner.description}
                     </p>
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     >
                       En savoir plus <ArrowRight className="ml-1 h-4 w-4" />
@@ -237,7 +243,7 @@ const Partners = () => {
       {/* All Partners Grid with Filter */}
       <section className="py-16 bg-rich-black">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -247,18 +253,20 @@ const Partners = () => {
             <h2 className="font-playfair text-3xl md:text-4xl font-semibold mb-6 text-center">
               <span className="text-gradient">Tous nos partenaires</span>
             </h2>
-            
+
             {/* Category Filter */}
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               {categories.map((category) => (
                 <Button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  variant={activeCategory === category.id ? "secondary" : "ghost"}
+                  variant={
+                    activeCategory === category.id ? "secondary" : "ghost"
+                  }
                   className={cn(
                     "rounded-full px-6",
-                    activeCategory === category.id 
-                      ? "border-2 border-gold" 
+                    activeCategory === category.id
+                      ? "border-2 border-gold"
                       : "hover:bg-gold/10"
                   )}
                 >
@@ -268,7 +276,7 @@ const Partners = () => {
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -295,12 +303,13 @@ const Partners = () => {
                     <p className="text-off-white/80 text-sm mb-4 flex-grow">
                       {partner.description}
                     </p>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       className="text-gold/80 hover:text-gold self-start group-hover:text-gold group-hover:bg-gold/10 p-0"
                     >
-                      Voir les événements <ExternalLink className="ml-1 h-3 w-3" />
+                      Voir les événements{" "}
+                      <ExternalLink className="ml-1 h-3 w-3" />
                     </Button>
                   </div>
                 </div>
@@ -313,7 +322,7 @@ const Partners = () => {
       {/* Become a Partner */}
       <section className="py-16 glassmorphism-light">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -329,7 +338,7 @@ const Partners = () => {
             </p>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             variants={container}
             initial="hidden"
             whileInView="show"
@@ -343,7 +352,9 @@ const Partners = () => {
                 className="bg-black/30 p-8 rounded-lg border border-titanium/30 hover:border-gold transition-all group"
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">{benefit.icon}</div>
+                  <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                    {benefit.icon}
+                  </div>
                   <h3 className="font-playfair text-xl font-semibold mb-4 text-gold">
                     {benefit.title}
                   </h3>
@@ -353,7 +364,7 @@ const Partners = () => {
             ))}
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
