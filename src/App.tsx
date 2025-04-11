@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,6 +15,7 @@ import Partners from "./pages/Partners";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PurchaseTicket from "./pages/PurchaseTicket";
+import Events from "./pages/Events";
 import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
@@ -27,6 +29,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetail />} />
             <Route path="/events/:id/purchase" element={<PurchaseTicket />} />
             <Route path="/about" element={<About />} />

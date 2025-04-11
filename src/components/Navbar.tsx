@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect } from "react";
-import { Menu, X, Search, User, ShoppingBag, LogOut } from "lucide-react";
+import { Menu, X, User, ShoppingBag, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [session, setSession] = useState<Session | null>(null);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,10 +51,15 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const isActive = (path: string) => {
+    if (path === "/") {
+      return location.pathname === path;
+    }
+    return location.pathname.startsWith(path);
+  };
+
   const navLinks = [
-    { name: "Accueil", href: "/" },
-    { name: "Événements", href: "/#events" },
-    // { name: "À propos", href: "/about" },
+    { name: "Événements", href: "/events" },
     { name: "Comment ça marche", href: "/how-it-works" },
     { name: "FAQ", href: "/faq" },
     { name: "Contact", href: "/contact" },
@@ -84,7 +91,11 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="font-montserrat text-sm font-medium hover:text-gold transition-colors"
+                  className={`font-montserrat text-sm font-medium transition-colors ${
+                    isActive(link.href)
+                      ? "text-gold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-gold"
+                      : "hover:text-gold"
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -143,7 +154,11 @@ const Navbar = () => {
                 <Link
                   key={link.name}
                   to={link.href}
-                  className="px-3 py-2 text-base font-medium hover:text-gold"
+                  className={`px-3 py-2 text-base font-medium ${
+                    isActive(link.href)
+                      ? "text-gold relative after:content-[''] after:absolute after:-bottom-1 after:left-3 after:w-[calc(100%-24px)] after:h-0.5 after:bg-gold"
+                      : "hover:text-gold"
+                  }`}
                   onClick={toggleMenu}
                 >
                   {link.name}

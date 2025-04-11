@@ -1,267 +1,114 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import EventCard, { EventProps } from "./EventCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { CalendarIcon, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+
+// Mock data for events
+const mockEvents: EventProps[] = [
+  {
+    id: 1,
+    title: "Festival de Jazz de Paris",
+    image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6a3?q=80&w=1740&auto=format&fit=crop",
+    date: "15 juin 2025",
+    time: "19:00",
+    location: "Parc de la Villette, Paris",
+    category: "Jazz",
+    price: "À partir de 45€"
+  },
+  {
+    id: 2,
+    title: "Concert de Céline Dion",
+    image: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=1740&auto=format&fit=crop",
+    date: "20 juillet 2025",
+    time: "20:30",
+    location: "AccorHotels Arena, Paris",
+    category: "Pop",
+    price: "À partir de 79€"
+  },
+  {
+    id: 3,
+    title: "Ballet du Bolchoï",
+    image: "https://images.unsplash.com/photo-1576074087307-3e4b4421e021?q=80&w=1587&auto=format&fit=crop",
+    date: "5 août 2025",
+    time: "19:30",
+    location: "Opéra Garnier, Paris",
+    category: "Danse",
+    price: "À partir de 120€"
+  },
+  {
+    id: 4,
+    title: "Festival Lollapalooza",
+    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1740&auto=format&fit=crop",
+    date: "18-19 juillet 2025",
+    time: "14:00",
+    location: "Hippodrome de Longchamp, Paris",
+    category: "Rock",
+    price: "À partir de 89€"
+  },
+  {
+    id: 5,
+    title: "Exposition Van Gogh",
+    image: "https://images.unsplash.com/photo-1577083552462-4aeb740319d1?q=80&w=1632&auto=format&fit=crop",
+    date: "10 juin - 15 sept 2025",
+    time: "10:00 - 19:00",
+    location: "Atelier des Lumières, Paris",
+    category: "Exposition",
+    price: "À partir de 15€"
+  },
+  {
+    id: 6,
+    title: "Techno Parade",
+    image: "https://images.unsplash.com/photo-1571266028243-e1f00d3f45d0?q=80&w=1664&auto=format&fit=crop",
+    date: "12 septembre 2025",
+    time: "12:00",
+    location: "Place de la République, Paris",
+    category: "Électro",
+    price: "Gratuit"
+  }
+];
 
 const EventsSection = () => {
-  const [activeFilter, setActiveFilter] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [locationFilter, setLocationFilter] = useState<string>("");
-  const [dateFilter, setDateFilter] = useState<string>("");
-
-  const events: EventProps[] = [
-    {
-      id: 1,
-      title: "Festival Jazz & Soul",
-      image:
-        "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "12 Juin 2025",
-      time: "20:00",
-      location: "Paris",
-      category: "Concert",
-      price: "89€",
-      featured: true,
-    },
-    {
-      id: 2,
-      title: "Tournoi International de Tennis",
-      image:
-        "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "5 Juillet 2025",
-      time: "14:00",
-      location: "Lyon",
-      category: "Sport",
-      price: "120€",
-    },
-    {
-      id: 3,
-      title: "Exposition d'Art Moderne",
-      image:
-        "https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "18 Août 2025",
-      time: "10:00",
-      location: "Marseille",
-      category: "Culture",
-      price: "25€",
-    },
-    {
-      id: 4,
-      title: "Concert de Rock Live",
-      image:
-        "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "29 Mai 2025",
-      time: "21:00",
-      location: "Bordeaux",
-      category: "Concert",
-      price: "75€",
-    },
-    {
-      id: 5,
-      title: "Spectacle Cirque du Monde",
-      image:
-        "https://images.unsplash.com/photo-1573480813647-552e9b7b5394?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "10 Juin 2025",
-      time: "19:30",
-      location: "Lille",
-      category: "Spectacle",
-      price: "45€",
-    },
-    {
-      id: 6,
-      title: "Coupe de Football Nationale",
-      image:
-        "https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "23 Juillet 2025",
-      time: "16:00",
-      location: "Paris",
-      category: "Sport",
-      price: "95€",
-      featured: true,
-    },
-    {
-      id: 7,
-      title: "Festival Électronique de Nuit",
-      image:
-        "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "4 Août 2025",
-      time: "22:00",
-      location: "Nice",
-      category: "Festival",
-      price: "65€",
-    },
-    {
-      id: 8,
-      title: "Conférence Tech Future",
-      image:
-        "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "15 Juin 2025",
-      time: "09:00",
-      location: "Toulouse",
-      category: "Conférence",
-      price: "150€",
-    },
-    {
-      id: 9,
-      title: "Ballet Classique International",
-      image:
-        "https://images.unsplash.com/photo-1537365587684-f490dff69498?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      date: "2 Juillet 2025",
-      time: "20:30",
-      location: "Strasbourg",
-      category: "Spectacle",
-      price: "110€",
-      featured: true,
-    },
-  ];
-
-  // Get unique categories
-  const categories = [
-    "all",
-    ...new Set(events.map((event) => event.category.toLowerCase())),
-  ];
-
-  // Get unique locations
-  const locations = [...new Set(events.map((event) => event.location))];
-
-  // Filter events based on active filters
-  const filteredEvents = events.filter((event) => {
-    const matchesCategory =
-      activeFilter === "all" || event.category.toLowerCase() === activeFilter;
-    const matchesSearch = event.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesLocation =
-      !locationFilter || event.location === locationFilter;
-    const matchesDate = !dateFilter || event.date.includes(dateFilter);
-    return matchesCategory && matchesSearch && matchesLocation && matchesDate;
-  });
+  const [visibleEvents, setVisibleEvents] = useState(6);
 
   return (
-    <section id="events" className="py-20 bg-rich-black">
+    <section className="py-24 bg-rich-black" id="events">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-gradient">Événements à venir</span>
-          </h2>
-          <p className="text-off-white/70 max-w-2xl mx-auto">
-            Découvrez notre sélection d'événements exceptionnels et réservez vos
-            places pour des expériences inoubliables.
-          </p>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
+          <div>
+            <h2 className="font-playfair text-4xl font-bold mb-4 text-gold">
+              Événements à venir
+            </h2>
+            <p className="text-off-white/70 max-w-2xl">
+              Découvrez notre sélection d'événements exclusifs et sécurisez vos
+              billets dès maintenant.
+            </p>
+          </div>
+          <Link to="/events">
+            <Button
+              className="mt-6 md:mt-0 bg-transparent border border-gold text-gold hover:bg-gold hover:text-rich-black transition-all duration-300"
+            >
+              Voir tous les événements
+            </Button>
+          </Link>
         </div>
 
-        {/* Search and Filters */}
-        <div className="mb-10 glassmorphism p-6 rounded-lg">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-off-white/50" />
-              <Input
-                placeholder="Rechercher un événement..."
-                className="pl-10 bg-transparent border-titanium/30 focus:border-gold"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {mockEvents.slice(0, visibleEvents).map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
 
-            <div>
-              <Select onValueChange={setLocationFilter} value={locationFilter}>
-                <SelectTrigger className="bg-transparent border-titanium/30 focus:border-gold">
-                  <SelectValue placeholder="Lieu" />
-                </SelectTrigger>
-                <SelectContent className="bg-rich-black border border-titanium/30">
-                  <SelectItem value="all">Tous les lieux</SelectItem>
-                  {locations.map((location) => (
-                    <SelectItem key={location} value={location}>
-                      {location}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="relative">
-              <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-off-white/50" />
-              <Input
-                type="text"
-                placeholder="Date (ex: Juin 2025)"
-                className="pl-10 bg-transparent border-titanium/30 focus:border-gold"
-                value={dateFilter}
-                onChange={(e) => setDateFilter(e.target.value)}
-              />
-            </div>
-
+        {visibleEvents < mockEvents.length && (
+          <div className="text-center mt-16">
             <Button
+              onClick={() => setVisibleEvents(visibleEvents + 3)}
               className="bg-gold text-rich-black hover:bg-gold/80"
-              onClick={() => {
-                setSearchTerm("");
-                setLocationFilter("");
-                setDateFilter("");
-                setActiveFilter("all");
-              }}
             >
-              Réinitialiser les filtres
+              Charger plus
             </Button>
           </div>
-        </div>
-
-        {/* Category tabs */}
-        <Tabs
-          defaultValue="all"
-          value={activeFilter}
-          onValueChange={setActiveFilter}
-          className="mb-10"
-        >
-          <TabsList className="bg-transparent border border-titanium/30 p-1 w-full overflow-x-auto flex flex-nowrap max-w-full">
-            {categories.map((category) => (
-              <TabsTrigger
-                key={category}
-                value={category}
-                className={cn(
-                  "flex-1 capitalize whitespace-nowrap",
-                  activeFilter === category
-                    ? "bg-bordeaux text-off-white data-[state=active]:bg-bordeaux data-[state=active]:text-off-white"
-                    : ""
-                )}
-              >
-                {category === "all" ? "Tous" : category}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {categories.map((category) => (
-            <TabsContent key={category} value={category} className="mt-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredEvents.length > 0 ? (
-                  filteredEvents.map((event) => (
-                    <EventCard key={event.id} event={event} />
-                  ))
-                ) : (
-                  <div className="col-span-3 text-center py-10">
-                    <p className="text-off-white/70 text-lg">
-                      Aucun événement ne correspond à vos critères de recherche.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-
-        <div className="text-center mt-12">
-          <Button className="bg-gold text-rich-black hover:bg-gold/80 px-8 py-6">
-            Voir tous les événements
-          </Button>
-        </div>
+        )}
       </div>
     </section>
   );
