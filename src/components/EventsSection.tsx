@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from "react";
 import EventCard, { EventProps } from "./EventCard";
 import { Button } from "@/components/ui/button";
@@ -122,21 +123,20 @@ const EventsSection = () => {
   const events = data?.pages.flatMap(page => page.events) || [];
 
   return (
-    <section className="py-24 bg-rich-black" id="events">
+    <section className="py-16 bg-rich-black" id="events">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
           <div>
-            <h2 className="font-playfair text-4xl font-bold mb-4 text-gold">
-              Événements à venir
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 text-gold">
+              Les événements à ne pas manquer
             </h2>
             <p className="text-off-white/70 max-w-2xl">
-              Découvrez notre sélection d'événements exclusifs et sécurisez vos
-              billets dès maintenant.
+              Réservez vos places pour les événements les plus attendus de l'année.
             </p>
           </div>
           <Link to="/events">
             <Button
-              className="mt-6 md:mt-0 bg-transparent border border-gold text-gold hover:bg-gold hover:text-rich-black transition-all duration-300"
+              className="mt-6 md:mt-0 bg-gold hover:bg-gold/80 text-rich-black font-semibold transition-all duration-300"
             >
               Voir tous les événements
             </Button>
@@ -148,6 +148,8 @@ const EventsSection = () => {
             <div 
               key={`${event.id}-${index}`} 
               ref={index === events.length - 1 ? lastEventElementRef : null}
+              className="animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <EventCard event={event} />
             </div>
