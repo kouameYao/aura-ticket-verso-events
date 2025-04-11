@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from "react";
 import EventCard, { EventProps } from "./EventCard";
 import { Button } from "@/components/ui/button";
@@ -101,7 +100,7 @@ const EventsSection = () => {
     initialPageParam: 0
   });
 
-  // Observer for infinite scrolling
+  // Observer for infinite scrolling - Now these variables are defined before they are used
   const observer = useRef<IntersectionObserver | null>(null);
   const lastEventElementRef = useCallback(
     (node: HTMLDivElement | null) => {

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -219,34 +220,7 @@ const Events = () => {
   const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
   const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
   
-  const observer = useRef<IntersectionObserver | null>(null);
-  const lastEventElementRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (isFetchingNextPage) return;
-      
-      if (observer.current) observer.current.disconnect();
-      
-      observer.current = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      });
-      
-      if (node) observer.current.observe(node);
-    },
-    [isFetchingNextPage, hasNextPage, fetchNextPage]
-  );
-  
-  const activeFilters = [
-    ...(selectedCategory !== "Tous" ? [{ type: "category", value: selectedCategory }] : []),
-    ...(searchQuery ? [{ type: "search", value: searchQuery }] : []),
-    ...(selectedDate ? [{ type: "date", value: format(selectedDate, "dd MMM yyyy", { locale: fr }) }] : []),
-    ...(selectedLocation ? [{ type: "location", value: selectedLocation }] : []),
-    ...(priceRange[0] > 0 || priceRange[1] < 200 ? [{ type: "price", value: `${priceRange[0]}€ - ${priceRange[1]}€` }] : []),
-    ...selectedArtists.map(artist => ({ type: "artist", value: artist })),
-    ...selectedVenues.map(venue => ({ type: "venue", value: venue })),
-  ];
-
+  // First get the query data
   const {
     data,
     fetchNextPage,
@@ -270,6 +244,35 @@ const Events = () => {
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 0
   });
+  
+  // Then use the variables from the query in the observer hook
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastEventElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetchingNextPage || !node) return;
+      
+      if (observer.current) observer.current.disconnect();
+      
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      
+      observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
+  
+  const activeFilters = [
+    ...(selectedCategory !== "Tous" ? [{ type: "category", value: selectedCategory }] : []),
+    ...(searchQuery ? [{ type: "search", value: searchQuery }] : []),
+    ...(selectedDate ? [{ type: "date", value: format(selectedDate, "dd MMM yyyy", { locale: fr }) }] : []),
+    ...(selectedLocation ? [{ type: "location", value: selectedLocation }] : []),
+    ...(priceRange[0] > 0 || priceRange[1] < 200 ? [{ type: "price", value: `${priceRange[0]}€ - ${priceRange[1]}€` }] : []),
+    ...selectedArtists.map(artist => ({ type: "artist", value: artist })),
+    ...selectedVenues.map(venue => ({ type: "venue", value: venue })),
+  ];
 
   const allEvents = data?.pages.flatMap(page => page.events) || [];
   const totalEvents = data?.pages[0]?.totalEvents || 0;
