@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EventCard from "@/components/EventCard";
@@ -38,6 +37,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { EventProps } from "@/components/EventCard";
 import { Badge } from "@/components/ui/badge";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 // Données de test pour les événements
 const mockEvents: EventProps[] = [
@@ -151,6 +151,64 @@ const venues = [
   "Atelier des Lumières"
 ];
 
+// Simulated API function to fetch events with pagination
+const fetchEvents = async ({ 
+  pageParam = 0, 
+  searchQuery = "", 
+  category = "Tous", 
+  location = "",
+  selectedDate = undefined,
+  priceRange = [0, 200],
+  selectedArtists = [],
+  selectedVenues = []
+}) => {
+  const PAGE_SIZE = 3;
+  
+  const filteredEvents = mockEvents.filter(event => {
+    if (searchQuery && !event.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    
+    if (category !== "Tous" && event.category !== category) {
+      return false;
+    }
+
+    if (location && !event.location.includes(location)) {
+      return false;
+    }
+
+    if (selectedArtists.length > 0 && !selectedArtists.some(artist => event.title.includes(artist))) {
+      return false;
+    }
+
+    if (selectedVenues.length > 0 && !selectedVenues.some(venue => event.location.includes(venue))) {
+      return false;
+    }
+
+    const priceMatch = event.price.match(/\d+/);
+    if (priceMatch) {
+      const price = parseInt(priceMatch[0]);
+      if (price < priceRange[0] || price > priceRange[1]) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  const start = pageParam * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const paginatedEvents = filteredEvents.slice(start, end);
+  
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  return {
+    events: paginatedEvents,
+    nextPage: paginatedEvents.length === PAGE_SIZE ? pageParam + 1 : undefined,
+    totalEvents: filteredEvents.length
+  };
+};
+
 const Events = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Tous");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -161,7 +219,24 @@ const Events = () => {
   const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
   const [selectedVenues, setSelectedVenues] = useState<string[]>([]);
   
-  // Liste des filtres actifs
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastEventElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetchingNextPage) return;
+      
+      if (observer.current) observer.current.disconnect();
+      
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
+  
   const activeFilters = [
     ...(selectedCategory !== "Tous" ? [{ type: "category", value: selectedCategory }] : []),
     ...(searchQuery ? [{ type: "search", value: searchQuery }] : []),
@@ -171,6 +246,33 @@ const Events = () => {
     ...selectedArtists.map(artist => ({ type: "artist", value: artist })),
     ...selectedVenues.map(venue => ({ type: "venue", value: venue })),
   ];
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error
+  } = useInfiniteQuery({
+    queryKey: ['events', searchQuery, selectedCategory, selectedLocation, selectedDate, priceRange, selectedArtists, selectedVenues],
+    queryFn: ({ pageParam }) => fetchEvents({
+      pageParam,
+      searchQuery,
+      category: selectedCategory,
+      location: selectedLocation,
+      selectedDate,
+      priceRange,
+      selectedArtists,
+      selectedVenues
+    }),
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0
+  });
+
+  const allEvents = data?.pages.flatMap(page => page.events) || [];
+  const totalEvents = data?.pages[0]?.totalEvents || 0;
 
   const toggleArtist = (artist: string) => {
     if (selectedArtists.includes(artist)) {
@@ -224,50 +326,10 @@ const Events = () => {
     }
   };
 
-  // Filtrage des événements
-  const filteredEvents = mockEvents.filter(event => {
-    // Filtre par recherche
-    if (searchQuery && !event.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    // Filtre par catégorie
-    if (selectedCategory !== "Tous" && event.category !== selectedCategory) {
-      return false;
-    }
-
-    // Filtre par lieu
-    if (selectedLocation && !event.location.includes(selectedLocation)) {
-      return false;
-    }
-
-    // Filtre par artiste (simulation - dans une vraie application, on aurait une liste d'artistes par événement)
-    if (selectedArtists.length > 0 && !selectedArtists.some(artist => event.title.includes(artist))) {
-      return false;
-    }
-
-    // Filtre par lieu (simulation)
-    if (selectedVenues.length > 0 && !selectedVenues.some(venue => event.location.includes(venue))) {
-      return false;
-    }
-
-    // Simulation filtre par prix (dans une vraie application, on aurait des prix numériques)
-    const priceMatch = event.price.match(/\d+/);
-    if (priceMatch) {
-      const price = parseInt(priceMatch[0]);
-      if (price < priceRange[0] || price > priceRange[1]) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-
   return (
     <div className="min-h-screen bg-rich-black">
       <Navbar />
 
-      {/* Hero Section */}
       <section className="pt-32 pb-20 relative">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-20"
@@ -291,7 +353,6 @@ const Events = () => {
         </div>
       </section>
 
-      {/* Filters Section */}
       <section className="py-8 bg-rich-black/80">
         <div className="container mx-auto px-4">
           <div className="glassmorphism p-6 rounded-lg">
@@ -482,7 +543,6 @@ const Events = () => {
               </div>
             )}
 
-            {/* Active filters */}
             {activeFilters.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
                 {activeFilters.map((filter, i) => (
@@ -504,22 +564,51 @@ const Events = () => {
         </div>
       </section>
 
-      {/* Events Section */}
       <section className="py-16 bg-rich-black">
         <div className="container mx-auto px-4">
           <div className="mb-12">
             <h2 className="font-playfair text-3xl font-bold mb-6 text-gold">
-              {filteredEvents.length > 0
-                ? `Événements trouvés (${filteredEvents.length})`
+              {totalEvents > 0
+                ? `Événements trouvés (${totalEvents})`
                 : "Aucun événement trouvé"}
             </h2>
           </div>
 
-          {filteredEvents.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-16">
+              <div className="animate-pulse flex flex-col items-center">
+                <div className="h-12 w-12 rounded-full border-4 border-t-gold border-r-gold/40 border-b-gold/10 border-l-gold/30 animate-spin"></div>
+                <p className="mt-4 text-off-white/80">Chargement des événements...</p>
+              </div>
+            </div>
+          ) : isError ? (
+            <div className="text-center py-16">
+              <p className="text-off-white/80 mb-4">
+                Une erreur s'est produite lors du chargement des événements.
+              </p>
+              <Button
+                onClick={() => window.location.reload()}
+                className="bg-gold text-rich-black hover:bg-gold/80"
+              >
+                Réessayer
+              </Button>
+            </div>
+          ) : allEvents.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredEvents.map((event) => (
-                <EventCard key={event.id} event={event} />
+              {allEvents.map((event, index) => (
+                <div 
+                  key={`${event.id}-${index}`}
+                  ref={index === allEvents.length - 1 ? lastEventElementRef : null}
+                >
+                  <EventCard event={event} />
+                </div>
               ))}
+              
+              {isFetchingNextPage && (
+                <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center py-8">
+                  <div className="h-8 w-8 rounded-full border-2 border-t-gold border-r-gold/40 border-b-gold/10 border-l-gold/30 animate-spin"></div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-16">

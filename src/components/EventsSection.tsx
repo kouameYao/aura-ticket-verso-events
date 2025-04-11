@@ -1,8 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import EventCard, { EventProps } from "./EventCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 // Mock data for events
 const mockEvents: EventProps[] = [
@@ -68,8 +69,58 @@ const mockEvents: EventProps[] = [
   }
 ];
 
+// Simulated API function to fetch homepage events
+const fetchHomeEvents = async ({ pageParam = 0 }) => {
+  const PAGE_SIZE = 3;
+  
+  // Get page slice
+  const start = pageParam * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const paginatedEvents = mockEvents.slice(start, end);
+  
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  return {
+    events: paginatedEvents,
+    nextPage: end < mockEvents.length ? pageParam + 1 : undefined
+  };
+};
+
 const EventsSection = () => {
-  const [visibleEvents, setVisibleEvents] = useState(6);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status
+  } = useInfiniteQuery({
+    queryKey: ['homeEvents'],
+    queryFn: fetchHomeEvents,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 0
+  });
+
+  // Observer for infinite scrolling
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastEventElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node || isFetchingNextPage) return;
+      
+      if (observer.current) observer.current.disconnect();
+      
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      
+      observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
+
+  const events = data?.pages.flatMap(page => page.events) || [];
 
   return (
     <section className="py-24 bg-rich-black" id="events">
@@ -94,18 +145,30 @@ const EventsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {mockEvents.slice(0, visibleEvents).map((event) => (
-            <EventCard key={event.id} event={event} />
+          {events.map((event, index) => (
+            <div 
+              key={`${event.id}-${index}`} 
+              ref={index === events.length - 1 ? lastEventElementRef : null}
+            >
+              <EventCard event={event} />
+            </div>
           ))}
         </div>
 
-        {visibleEvents < mockEvents.length && (
+        {isFetchingNextPage && (
+          <div className="text-center mt-8">
+            <div className="inline-block h-8 w-8 rounded-full border-2 border-t-gold border-r-gold/40 border-b-gold/10 border-l-gold/30 animate-spin"></div>
+          </div>
+        )}
+        
+        {status === 'error' && (
           <div className="text-center mt-16">
+            <p className="text-off-white/70 mb-4">Une erreur s'est produite lors du chargement des événements.</p>
             <Button
-              onClick={() => setVisibleEvents(visibleEvents + 3)}
+              onClick={() => window.location.reload()}
               className="bg-gold text-rich-black hover:bg-gold/80"
             >
-              Charger plus
+              Réessayer
             </Button>
           </div>
         )}
