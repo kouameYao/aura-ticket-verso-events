@@ -47,7 +47,7 @@ const CreatorSection = () => {
                 </Button>
               </div>
 
-              <div className="flex items-center text-off-white/70">
+              <div className="flex items-center text-off-white/80">
                 <span className="text-gold font-bold text-lg mr-2">+1000</span>{" "}
                 organisateurs font confiance à AuraTickets
               </div>
@@ -59,7 +59,7 @@ const CreatorSection = () => {
                 <h3 className="font-playfair text-xl font-semibold mb-2 text-gold">
                   Créez facilement
                 </h3>
-                <p className="text-off-white/70">
+                <p className="text-off-white/80">
                   Créez des événements en quelques clics avec notre interface
                   intuitive.
                 </p>
@@ -70,7 +70,7 @@ const CreatorSection = () => {
                 <h3 className="font-playfair text-xl font-semibold mb-2 text-gold">
                   Vendez partout
                 </h3>
-                <p className="text-off-white/70">
+                <p className="text-off-white/80">
                   Gérez vos ventes de billets sur web, mobile et en point de
                   vente.
                 </p>
@@ -81,7 +81,7 @@ const CreatorSection = () => {
                 <h3 className="font-playfair text-xl font-semibold mb-2 text-gold">
                   Élargissez votre public
                 </h3>
-                <p className="text-off-white/70">
+                <p className="text-off-white/80">
                   Atteignez une nouvelle audience grâce à notre réseau
                   d'acheteurs.
                 </p>
@@ -92,7 +92,7 @@ const CreatorSection = () => {
                 <h3 className="font-playfair text-xl font-semibold mb-2 text-gold">
                   Analysez vos résultats
                 </h3>
-                <p className="text-off-white/70">
+                <p className="text-off-white/80">
                   Accédez à des statistiques détaillées sur vos ventes et
                   participants.
                 </p>

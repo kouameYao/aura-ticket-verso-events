@@ -65,7 +65,7 @@ const FeaturedEvents = () => {
   ];
 
   return (
-    <section className="py-20 bg-rich-black">
+    <section className="pt-6 pb-10 bg-rich-black">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4">

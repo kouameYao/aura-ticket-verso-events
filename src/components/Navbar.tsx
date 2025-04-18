@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X, User, ShoppingBag, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
+import ThemeToggle from "./customs/ThemeToggle";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -105,6 +105,7 @@ const Navbar = () => {
 
           {/* Desktop Right Icons */}
           <div className="hidden md:flex items-center space-x-4">
+            <ThemeToggle />
             {session ? (
               <>
                 <Button variant="ghost" size="icon" className="hover:text-gold">
@@ -167,6 +168,8 @@ const Navbar = () => {
               <div className="pt-4 flex items-center justify-between border-t border-white/10">
                 {session ? (
                   <>
+                    <ThemeToggle />
+
                     <Button
                       variant="ghost"
                       size="icon"
